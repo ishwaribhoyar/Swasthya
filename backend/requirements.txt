@@ -1,4 +1,4 @@
-# ClinIQ Backend — Runtime Dependencies
+# Swasthya Backend — Runtime Dependencies
 # Updated for Python 3.14 compatibility & Phase 5 AI Copilot
 fastapi>=0.111.0
 uvicorn[standard]>=0.29.0

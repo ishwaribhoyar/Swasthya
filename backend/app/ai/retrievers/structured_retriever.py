@@ -1,5 +1,5 @@
 """
-Structured Clinical Data Retriever for ClinIQ Phase 5 RAG.
+Structured Clinical Data Retriever for Swasthya Phase 5 RAG.
 
 Queries SQLite-backed structured records:
 - Parameter History & Trends (Phase 4 deterministic analytics)

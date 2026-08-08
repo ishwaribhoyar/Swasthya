@@ -3,7 +3,7 @@ import react from '@vitejs/plugin-react';
 import path from 'path';
 
 /**
- * Vite configuration for ClinIQ
+ * Vite configuration for Swasthya
  * Sets up React plugin and path aliases for clean imports.
  */
 export default defineConfig({
@@ -14,7 +14,8 @@ export default defineConfig({
     },
   },
   server: {
-    port: 5173,
+    port: 3000,
+    strictPort: true,
     host: true,
   },
 });

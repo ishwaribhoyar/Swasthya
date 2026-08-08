@@ -10,7 +10,7 @@ const client = axios.create({
 });
 
 client.interceptors.request.use((config) => {
-  const token = localStorage.getItem('cliniq_access_token');
+  const token = localStorage.getItem('swasthya_access_token');
   if (token && token !== 'undefined') {
     config.headers.Authorization = `Bearer ${token}`;
   }
@@ -21,9 +21,9 @@ client.interceptors.response.use(
   (response: AxiosResponse) => response.data,
   (error: AxiosError) => {
     if (error.response?.status === 401) {
-      localStorage.removeItem('cliniq_access_token');
-      localStorage.removeItem('cliniq_refresh_token');
-      window.dispatchEvent(new Event('cliniq_unauthorized'));
+      localStorage.removeItem('swasthya_access_token');
+      localStorage.removeItem('swasthya_refresh_token');
+      window.dispatchEvent(new Event('swasthya_unauthorized'));
       
       if (!window.location.pathname.includes('/login') && !window.location.pathname.includes('/register')) {
         window.location.href = '/login';

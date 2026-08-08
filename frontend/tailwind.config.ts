@@ -1,7 +1,7 @@
 import type { Config } from 'tailwindcss';
 
 /**
- * TailwindCSS configuration for ClinIQ.
+ * TailwindCSS configuration for Swasthya.
  *
  * Design System:
  * - Primary: Medical Blue (#1D6FA4)
@@ -18,7 +18,7 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        // ── ClinIQ Brand ──────────────────────────────────────────
+        // ── Swasthya Brand ──────────────────────────────────────────
         primary: {
           DEFAULT: 'rgb(var(--color-primary) / <alpha-value>)',
           foreground: 'rgb(var(--color-primary-foreground) / <alpha-value>)',

@@ -1,0 +1,9 @@
+SWASTHYA MEDICAL RECORD — MAINTENANCE PRESCRIPTION
+Patient Name: Arjun Mehta
+Document ID: b66ddb01-21ed-4b60-a131-a43ad1171208
+Date of Record: 2025-08-26
+Category: PRESCRIPTION
+============================================================
+
+PRESCRIPTION DETAILS:
+  • Vitamin D3 1000IU — Dose: 1 cap, Freq: Once daily, Route: Oral, Duration: 90 days (With breakfast)

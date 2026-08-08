@@ -1,0 +1,9 @@
+SWASTHYA MEDICAL RECORD — ANNUAL PHYSICAL WELLNESS NOTE
+Patient Name: Arjun Mehta
+Document ID: c6abad51-288c-4e93-b128-6d0dc669809b
+Date of Record: 2021-08-16
+Category: NOTES
+============================================================
+
+CLINICAL SUMMARY & OBSERVATIONS:
+Patient Arjun Mehta examined for routine annual physical. General health excellent. Normal cardiopulmonary exam. Advised routine diet and exercise.

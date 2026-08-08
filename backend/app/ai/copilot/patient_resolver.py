@@ -1,5 +1,5 @@
 """
-Patient Resolution Engine for ClinIQ Phase 5.
+Patient Resolution Engine for Swasthya Phase 5.
 
 Resolves patient references (Name, MRN, ID) against SQLite.
 Supports:
@@ -57,46 +57,6 @@ class PatientResolver:
         Resolve patient identity by ID, MRN, or Name.
         Strictly scoped to clinician_id.
         """
-        # Mode 1: Explicit Patient ID supplied (Patient Detail view)
-        if explicit_patient_id:
-            stmt = select(Patient).where(
-                Patient.id == explicit_patient_id,
-                Patient.clinician_id == clinician_id,
-            )
-            res = await self._session.execute(stmt)
-            p = res.scalar_one_or_none()
-
-            if not p:
-                _log.warning("PATIENT_RESOLVER.EXPLICIT_ID_UNAUTHORIZED", patient_id=explicit_patient_id)
-                return PatientResolutionResult(
-                    status="NOT_FOUND",
-                    message="Patient not found or unauthorized.",
-                )
-            
-            return PatientResolutionResult(
-                status="RESOLVED",
-                patient=self._patient_service._to_read(p),
-            )
-
-        # Mode 2: Global Search from Query String (Name or MRN)
-        # Check MRN pattern MRN-YYYY-XXXXXX
-        mrn_match = re.search(r"\bMRN-\d{4}-\d{6}\b", query_text, re.IGNORECASE)
-        if mrn_match:
-            mrn_str = mrn_match.group(0).upper()
-            stmt = select(Patient).where(
-                Patient.mrn == mrn_str,
-                Patient.clinician_id == clinician_id,
-            )
-            res = await self._session.execute(stmt)
-            p = res.scalar_one_or_none()
-
-            if p:
-                return PatientResolutionResult(
-                    status="RESOLVED",
-                    patient=self._patient_service._to_read(p),
-                )
-
-        # Name Search
         # Fetch all active patients for this clinician
         stmt = select(Patient).where(
             Patient.clinician_id == clinician_id,
@@ -112,8 +72,20 @@ class PatientResolver:
             )
 
         query_lower = query_text.lower()
-        matched: List[Patient] = []
 
+        # Check MRN pattern MRN-...
+        mrn_match = re.search(r"\bMRN-[A-Za-z0-9-]+\b", query_text, re.IGNORECASE)
+        if mrn_match:
+            mrn_str = mrn_match.group(0).upper()
+            for p in all_patients:
+                if p.mrn.upper() == mrn_str:
+                    return PatientResolutionResult(
+                        status="RESOLVED",
+                        patient=self._patient_service._to_read(p),
+                    )
+
+        # Name Search from query text
+        matched: List[Patient] = []
         for p in all_patients:
             full_name = f"{p.first_name} {p.last_name}".lower()
             if (
@@ -123,35 +95,52 @@ class PatientResolver:
             ):
                 matched.append(p)
 
-        # If no explicit name matched in query string:
-        if not matched:
-            # If clinician has exactly 1 patient, auto-resolve to that patient
-            if len(all_patients) == 1:
-                _log.info("PATIENT_RESOLVER.SINGLE_PATIENT_AUTO_RESOLVED", patient_id=all_patients[0].id)
-                return PatientResolutionResult(
-                    status="RESOLVED",
-                    patient=self._patient_service._to_read(all_patients[0]),
-                )
-            
-            # If multiple patients exist, return selectable candidate list
-            candidates = [self._patient_service._to_read(m) for m in all_patients]
-            return PatientResolutionResult(
-                status="AMBIGUOUS",
-                candidates=candidates,
-                message=f"Please select which patient you would like to query ({len(candidates)} active patients found).",
-            )
-
         if len(matched) == 1:
             return PatientResolutionResult(
                 status="RESOLVED",
                 patient=self._patient_service._to_read(matched[0]),
             )
+        elif len(matched) > 1:
+            candidates = [self._patient_service._to_read(m) for m in matched]
+            return PatientResolutionResult(
+                status="AMBIGUOUS",
+                candidates=candidates,
+                message=f"Multiple patients match your query ({len(candidates)} candidates). Please select the correct patient.",
+            )
 
-        # Multiple patients match name -> AMBIGUOUS
-        candidates = [self._patient_service._to_read(m) for m in matched]
-        _log.info("PATIENT_RESOLVER.AMBIGUOUS", count=len(candidates))
+        # Check generic roster / list queries (e.g. "tell about anyone in db", "show patients", "who is in db")
+        generic_keywords = ["anyone", "everyone", "all patients", "roster", "database", "in db", "list patients", "who is in", "show patients"]
+        is_generic_roster_query = any(kw in query_lower for kw in generic_keywords)
+
+        if is_generic_roster_query:
+            candidates = [self._patient_service._to_read(m) for m in all_patients]
+            return PatientResolutionResult(
+                status="AMBIGUOUS",
+                candidates=candidates,
+                message=f"Here are the active patient records in your roster ({len(candidates)} patients available). Please select a patient to view their grounded clinical summary:",
+            )
+
+        # Fallback 1: Use explicit_patient_id if supplied from page context
+        if explicit_patient_id:
+            for p in all_patients:
+                if p.id == explicit_patient_id:
+                    return PatientResolutionResult(
+                        status="RESOLVED",
+                        patient=self._patient_service._to_read(p),
+                    )
+
+        # Fallback 2: If clinician has exactly 1 patient, auto-resolve to that patient
+        if len(all_patients) == 1:
+            _log.info("PATIENT_RESOLVER.SINGLE_PATIENT_AUTO_RESOLVED", patient_id=all_patients[0].id)
+            return PatientResolutionResult(
+                status="RESOLVED",
+                patient=self._patient_service._to_read(all_patients[0]),
+            )
+
+        # Fallback 3: Return selectable candidate list for all active patients
+        candidates = [self._patient_service._to_read(m) for m in all_patients]
         return PatientResolutionResult(
             status="AMBIGUOUS",
             candidates=candidates,
-            message=f"Multiple patients match your query ({len(candidates)} candidates). Please select the correct patient.",
+            message=f"Please select which patient you would like to query ({len(candidates)} active patients found in your roster):",
         )

@@ -1,7 +1,7 @@
 [project]
-name = "cliniq"
+name = "swasthya"
 version = "0.1.0"
-description = "ClinIQ Backend"
+description = "Swasthya Backend"
 readme = "README.md"
 requires-python = ">=3.11"
 

@@ -1,0 +1,9 @@
+SWASTHYA MEDICAL RECORD — NEPHROLOGY CONSULTATION NOTE
+Patient Name: Priya Sharma
+Document ID: a59cd26a-c6df-4562-a69a-ee9092025815
+Date of Record: 2024-02-10
+Category: NOTES
+============================================================
+
+CLINICAL SUMMARY & OBSERVATIONS:
+Patient exhibits progressive decline in eGFR (61 mL/min/1.73m²) and serum creatinine rise to 1.35 mg/dL. Microalbuminuria present. Diagnosis: Stage 2-3 Chronic Kidney Disease secondary to Diabetic Nephropathy.

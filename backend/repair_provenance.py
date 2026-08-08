@@ -1,5 +1,5 @@
 """
-ClinIQ — Provenance Repair Migration
+Swasthya — Provenance Repair Migration
 Back-fills document_id on existing lab_results, vital_signs, and clinical_alerts
 that were written before the per-document provenance fix.
 
@@ -19,7 +19,7 @@ from datetime import datetime, timedelta
 
 sys.stdout.reconfigure(encoding='utf-8', errors='replace')
 
-DB_PATH = "cliniq.db"
+DB_PATH = "swasthya.db"
 conn = sqlite3.connect(DB_PATH)
 conn.row_factory = sqlite3.Row
 cur = conn.cursor()
@@ -34,7 +34,7 @@ def parse_dt(s):
             continue
     return None
 
-print("=== ClinIQ Provenance Repair ===\n")
+print("=== Swasthya Provenance Repair ===\n")
 
 # 1. Get all patients
 cur.execute("SELECT DISTINCT patient_id FROM documents")

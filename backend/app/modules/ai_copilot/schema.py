@@ -1,5 +1,5 @@
 """
-Pydantic schemas for ClinIQ Phase 5 Grounded RAG & AI Copilot.
+Pydantic schemas for Swasthya Phase 5 Grounded RAG & AI Copilot.
 """
 from __future__ import annotations
 
@@ -45,7 +45,7 @@ class RAGAuditTrace(BaseModel):
 
 
 class AICopilotChatResponse(BaseModel):
-    """Unified response container for ClinIQ AI Copilot."""
+    """Unified response container for Swasthya AI Copilot."""
     model_config = ConfigDict(from_attributes=True)
 
     success: bool = True
@@ -58,4 +58,4 @@ class AICopilotChatResponse(BaseModel):
     is_general_info: bool = False
     ambiguous_candidates: List[AmbiguousCandidate] = []
     audit_trace: Optional[RAGAuditTrace] = None
-    disclaimer: str = "ClinIQ provides record-grounded clinical information and does not replace clinician judgment."
+    disclaimer: str = "Swasthya provides record-grounded clinical information and does not replace clinician judgment."

@@ -11,7 +11,7 @@ from fastapi.exceptions import RequestValidationError
 
 from app.api.v1.router import api_router
 from app.core.config.settings import get_settings
-from app.core.exceptions import ClinIQBaseException
+from app.core.exceptions import SwasthyaBaseException
 from app.database.init_db import init_db
 from app.shared.middlewares.cors import configure_cors
 from app.shared.middlewares.error_handler import (
@@ -49,7 +49,7 @@ def create_app() -> FastAPI:
     configure_cors(app)
 
     # Register custom exception handlers with guaranteed CORS headers
-    app.add_exception_handler(ClinIQBaseException, global_error_handler)
+    app.add_exception_handler(SwasthyaBaseException, global_error_handler)
     app.add_exception_handler(HTTPException, http_exception_handler)
     app.add_exception_handler(RequestValidationError, validation_exception_handler)
     app.add_exception_handler(Exception, unhandled_exception_handler)

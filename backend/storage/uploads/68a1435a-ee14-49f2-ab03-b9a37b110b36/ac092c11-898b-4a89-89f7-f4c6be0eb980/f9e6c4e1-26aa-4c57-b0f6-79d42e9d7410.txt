@@ -1,0 +1,9 @@
+SWASTHYA MEDICAL RECORD — INPATIENT DISCHARGE SUMMARY - HYPERTENSIVE URGENCY
+Patient Name: Priya Sharma
+Document ID: f9e6c4e1-26aa-4c57-b0f6-79d42e9d7410
+Date of Record: 2024-06-12
+Category: DISCHARGE
+============================================================
+
+CLINICAL SUMMARY & OBSERVATIONS:
+Admission: 2024-06-10 | Discharge: 2024-06-12. Reason for Admission: Acute hypertensive urgency (BP 158/98 mmHg) and headache. Course: Stabilized with IV labetalol and oral Telmisartan dose adjustment to 80mg daily. Renal parameters monitored. Discharged in stable condition with outpatient nephrology follow-up.

@@ -1,0 +1,13 @@
+SWASTHYA MEDICAL RECORD — VITALS LOG
+Patient Name: Priya Sharma
+Document ID: c98dc66d-83a2-4b0c-a15b-dfca9e008feb
+Date of Record: 2023-05-18
+Category: VITALS
+============================================================
+
+VITAL SIGNS SHEET:
+  • Blood Pressure: 138/86 mmHg
+  • Heart Rate: 80 bpm
+  • SpO2: 97.0 %
+  • Temperature: 36.6 °C
+  • BMI: 28.5 kg/m2

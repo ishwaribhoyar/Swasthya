@@ -7,7 +7,7 @@ export default function AuthLayout() {
         <div className="max-w-md space-y-6">
           <div className="flex items-center space-x-3">
             <span className="text-4xl">🏥</span>
-            <h1 className="text-4xl font-bold tracking-tight">ClinIQ</h1>
+            <h1 className="text-4xl font-bold tracking-tight">Swasthya</h1>
           </div>
           <p className="text-xl opacity-90 leading-relaxed">
             Intelligent healthcare management for modern medical professionals. Streamline patient care, analytics, and records.

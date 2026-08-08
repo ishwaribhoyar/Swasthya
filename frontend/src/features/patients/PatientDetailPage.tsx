@@ -705,7 +705,7 @@ export default function PatientDetailPage() {
           <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
             <div className="flex items-center gap-2 mb-4 pb-3 border-b">
               <Bot className="h-5 w-5 text-blue-600" />
-              <h3 className="font-bold text-slate-900">ClinIQ AI Copilot — Patient Context: {patient.first_name} {patient.last_name} ({patient.mrn})</h3>
+              <h3 className="font-bold text-slate-900">Swasthya AI Copilot — Patient Context: {patient.first_name} {patient.last_name} ({patient.mrn})</h3>
             </div>
             <p className="text-xs text-slate-500 mb-4">Ask grounded clinical questions or request patient summaries. OpenAI GPT-5 Nano with 12-stage RAG pipeline active.</p>
             <button

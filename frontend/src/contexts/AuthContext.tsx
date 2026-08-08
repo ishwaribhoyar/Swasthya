@@ -34,8 +34,8 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 // ─── Storage Keys ─────────────────────────────────────────────────────────────
 
-const ACCESS_TOKEN_KEY  = 'cliniq_access_token';
-const REFRESH_TOKEN_KEY = 'cliniq_refresh_token';
+const ACCESS_TOKEN_KEY  = 'swasthya_access_token';
+const REFRESH_TOKEN_KEY = 'swasthya_refresh_token';
 
 // ─── Provider ─────────────────────────────────────────────────────────────────
 
@@ -104,9 +104,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setIsLoading(false);
     };
 
-    window.addEventListener('cliniq_unauthorized', handleUnauthorized);
+    window.addEventListener('swasthya_unauthorized', handleUnauthorized);
     return () => {
-      window.removeEventListener('cliniq_unauthorized', handleUnauthorized);
+      window.removeEventListener('swasthya_unauthorized', handleUnauthorized);
     };
   }, [clearSession]);
 

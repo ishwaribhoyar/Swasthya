@@ -1,0 +1,9 @@
+SWASTHYA MEDICAL RECORD — DAY-CARE ELECTIVE PROCEDURE SUMMARY
+Patient Name: Arjun Mehta
+Document ID: bc6984cf-8e19-4404-bf94-79bea99c82e2
+Date of Record: 2023-05-22
+Category: DISCHARGE
+============================================================
+
+CLINICAL SUMMARY & OBSERVATIONS:
+Admission: 2023-05-22 | Discharge: 2023-05-22. Reason: Routine Screening Colonoscopy. Procedure performed without complication. Normal mucosal architecture. Discharged in stable condition.

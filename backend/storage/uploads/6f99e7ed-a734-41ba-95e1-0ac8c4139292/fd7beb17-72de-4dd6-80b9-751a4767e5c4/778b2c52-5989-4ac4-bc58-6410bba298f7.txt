@@ -1,0 +1,18 @@
+SWASTHYA MEDICAL RECORD — LONGITUDINAL ROUTINE HEALTH SCREENING
+Patient Name: Arjun Mehta
+Document ID: 778b2c52-5989-4ac4-bc58-6410bba298f7
+Date of Record: 2025-08-25
+Category: LAB
+============================================================
+
+LABORATORY TEST RESULTS:
+  • Hemoglobin: 14.8 g/dL (Ref: 12.0 - 17.5 g/dL)
+  • WBC: 6700 /uL (Ref: 4500 - 11000 /uL)
+  • Platelets: 248000 /uL (Ref: 150000 - 450000 /uL)
+  • Serum Creatinine: 0.9 mg/dL (Ref: 0.6 - 1.2 mg/dL)
+  • eGFR: 100 mL/min/1.73m2 (Ref: > 90 mL/min)
+  • HbA1c: 5.3 % (Ref: 4.0 - 5.6 %)
+  • Fasting Glucose: 93 mg/dL (Ref: 70 - 99 mg/dL)
+  • ALT: 24 U/L (Ref: 7 - 56 U/L)
+  • AST: 22 U/L (Ref: 8 - 40 U/L)
+  • CRP: 0.9 mg/L (Ref: < 3.0 mg/L)

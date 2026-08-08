@@ -1,5 +1,5 @@
 """
-ClinIQ timeline module.
+Swasthya timeline module.
 """
 from __future__ import annotations
 

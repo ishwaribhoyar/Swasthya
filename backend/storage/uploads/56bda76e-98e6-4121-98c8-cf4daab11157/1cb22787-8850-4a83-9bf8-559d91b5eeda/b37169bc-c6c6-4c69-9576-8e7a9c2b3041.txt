@@ -1,0 +1,9 @@
+SWASTHYA MEDICAL RECORD — ANTIDIABETIC INITIATION PRESCRIPTION
+Patient Name: Priya Sharma
+Document ID: b37169bc-c6c6-4c69-9576-8e7a9c2b3041
+Date of Record: 2022-08-15
+Category: PRESCRIPTION
+============================================================
+
+PRESCRIPTION DETAILS:
+  • Metformin HCl 500mg — Dose: 1 tab, Freq: Once daily, Route: Oral, Duration: 90 days (With dinner)

@@ -1,0 +1,9 @@
+SWASTHYA MEDICAL RECORD — SPECIALIST FOLLOW-UP NOTE
+Patient Name: Priya Sharma
+Document ID: d00bdf4b-a038-40ef-87e6-ed241b8a1e81
+Date of Record: 2025-02-12
+Category: NOTES
+============================================================
+
+CLINICAL SUMMARY & OBSERVATIONS:
+Serum creatinine increased to 1.55 mg/dL; eGFR reduced to 52 mL/min. Patient notes bilateral ankle edema. Metformin dose reduced due to renal function; Linagliptin 5mg added.

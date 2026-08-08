@@ -1,5 +1,5 @@
 """
-FastAPI dependency injectors for ClinIQ.
+FastAPI dependency injectors for Swasthya.
 
 These functions are used with FastAPI's Depends() system to inject
 shared resources — database sessions, configuration, and the

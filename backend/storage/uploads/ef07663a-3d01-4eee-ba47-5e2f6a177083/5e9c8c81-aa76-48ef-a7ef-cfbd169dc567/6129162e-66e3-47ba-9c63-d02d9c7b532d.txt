@@ -1,0 +1,9 @@
+SWASTHYA MEDICAL RECORD — FOLLOW-UP CONSULTATION NOTE
+Patient Name: Priya Sharma
+Document ID: 6129162e-66e3-47ba-9c63-d02d9c7b532d
+Date of Record: 2022-02-18
+Category: NOTES
+============================================================
+
+CLINICAL SUMMARY & OBSERVATIONS:
+Patient reports mild fatigue. Weight increased by 1.5 kg. Blood pressure slightly elevated at 130/82 mmHg.

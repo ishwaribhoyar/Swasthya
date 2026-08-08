@@ -1,5 +1,5 @@
 """
-ClinIQ auth module.
+Swasthya auth module.
 """
 from __future__ import annotations
 

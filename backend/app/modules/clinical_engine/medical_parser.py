@@ -216,6 +216,10 @@ class MedicalParser:
                     continue
 
                 if any(re.search(pat, name_part, re.IGNORECASE) for pat in cfg["patterns"]):
+                    # Auto-normalize /uL values (>1000) for WBC and Platelets into k/uL
+                    if name in ("WBC", "Platelets") and val > 1000.0:
+                        val = round(val / 1000.0, 1)
+
                     # Determine status
                     status = "NORMAL"
                     if val < cfg["critical_low"]:

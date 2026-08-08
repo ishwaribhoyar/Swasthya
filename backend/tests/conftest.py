@@ -1,5 +1,5 @@
 """
-Pytest fixtures for ClinIQ backend tests.
+Pytest fixtures for Swasthya backend tests.
 Uses an isolated in-memory SQLite database for testing.
 """
 from __future__ import annotations

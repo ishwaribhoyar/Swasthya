@@ -1,5 +1,5 @@
 """
-FastAPI router for ClinIQ Phase 5 Grounded AI Copilot.
+FastAPI router for Swasthya Phase 5 Grounded AI Copilot.
 
 Endpoints:
   POST /api/v1/ai-copilot/chat — Global & Patient-scoped AI Copilot query endpoint.
@@ -22,7 +22,7 @@ router = APIRouter(prefix="/ai-copilot", tags=["AI Copilot"])
     "/chat",
     response_model=APIResponse[AICopilotChatResponse],
     status_code=status.HTTP_200_OK,
-    summary="Ask ClinIQ AI Copilot a grounded clinical question",
+    summary="Ask Swasthya AI Copilot a grounded clinical question",
 )
 async def chat_with_copilot(
     req: AICopilotChatRequest,

@@ -1,0 +1,9 @@
+SWASTHYA MEDICAL RECORD — FOLLOW-UP CLINICAL NOTE
+Patient Name: Arjun Mehta
+Document ID: 8090ffc0-3ea2-4076-a153-c160af4cea59
+Date of Record: 2024-02-18
+Category: NOTES
+============================================================
+
+CLINICAL SUMMARY & OBSERVATIONS:
+Patient presents for routine follow-up. Blood pressure optimal. All organ system screening parameters within reference ranges.

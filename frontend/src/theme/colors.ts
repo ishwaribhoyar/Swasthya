@@ -1,5 +1,5 @@
 /**
- * ClinIQ Design System Colors
+ * Swasthya Design System Colors
  * Defines the core palette used throughout the application.
  */
 export const COLORS = {

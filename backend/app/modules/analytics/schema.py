@@ -3,8 +3,7 @@ Pydantic schemas for Trend Analytics & Risk Detection Engine.
 """
 from __future__ import annotations
 
-from datetime import datetime
-from typing import Dict, List, Optional
+from typing import List, Optional
 from pydantic import BaseModel, ConfigDict
 
 
@@ -12,25 +11,33 @@ class ParameterDataPoint(BaseModel):
     """Single measurement point in time-series."""
 
     date: str
-    timestamp: str
     value: float
-    value_str: str
     unit: str
     status: str
-    reference_range: str
+    source_record_id: Optional[str] = None
+
+    model_config = ConfigDict(from_attributes=True)
 
 
 class ParameterTrendRead(BaseModel):
-    """Longitudinal trend & anomaly analysis result for a single parameter."""
+    """Longitudinal trend & anomaly analysis result matching frontend IParameterTrend."""
 
     parameter_name: str
     normalized_name: str
     unit: str
-    direction: str # Stable, Increasing, Rapid Increase, Decreasing, Rapid Decrease, Oscillating, Critical Rise
-    rate_of_change: str
-    risk_level: str # NORMAL, HIGH, LOW, CRITICAL
-    anomaly: Optional[str] = None
-    data_points: List[ParameterDataPoint]
+    latest_value: float
+    latest_date: str
+    direction: str  # STABLE, INCREASING, DECREASING, RAPIDLY_INCREASING, RAPIDLY_DECREASING, OSCILLATING
+    absolute_change: float
+    percentage_change: float
+    rate_of_change_per_day: float
+    observation_count: int
+    time_span_days: int
+    confidence: float
+    anomalies: List[str] = []
+    points: List[ParameterDataPoint] = []
+
+    model_config = ConfigDict(from_attributes=True)
 
 
 class AnalyticsOverviewRead(BaseModel):
@@ -39,4 +46,7 @@ class AnalyticsOverviewRead(BaseModel):
     patient_id: str
     total_parameters_tracked: int
     critical_anomalies_count: int
+    active_anomalies: List[str] = []
     parameter_trends: List[ParameterTrendRead]
+
+    model_config = ConfigDict(from_attributes=True)

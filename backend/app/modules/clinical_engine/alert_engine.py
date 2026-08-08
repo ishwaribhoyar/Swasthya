@@ -55,8 +55,12 @@ class AlertEngine:
             is_potassium = any(k in name.lower() for k in ["potassium", "k+", "serum potassium"])
             is_troponin = "troponin" in name.lower()
             is_platelets = "platelet" in name.lower()
-            is_glucose = any(g in name.lower() for g in ["glucose", "hba1c", "blood sugar"])
-            is_hemoglobin = any(h in name.lower() for h in ["hemoglobin", "hb", "haemoglobin"])
+            is_glucose = any(g in name.lower() for g in ["fasting glucose", "serum glucose", "random glucose", "blood glucose"]) and "hba1c" not in name.lower()
+            is_hemoglobin = (
+                ("hemoglobin" in name.lower() or "haemoglobin" in name.lower() or name.lower().strip() == "hb")
+                and "hba1c" not in name.lower()
+                and "a1c" not in name.lower()
+            )
 
             if is_potassium and val >= 6.0:
                 alerts.append({

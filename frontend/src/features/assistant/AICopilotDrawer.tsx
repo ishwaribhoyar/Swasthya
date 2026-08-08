@@ -39,8 +39,8 @@ export const AICopilotDrawer: React.FC<AICopilotDrawerProps> = ({
       id: 'welcome',
       sender: 'assistant',
       text: activePatientName
-        ? `Hello, Dr.! I am ClinIQ AI Copilot. Ask me any clinical question regarding **${activePatientName}** (e.g., "Has kidney function worsened?", "How many times was metformin prescribed?").`
-        : `Hello, Dr.! I am ClinIQ AI Copilot. Mention a patient name or ask any grounded clinical question across your patient roster.`,
+        ? `Hello, Dr.! I am Swasthya AI Copilot. Ask me any clinical question regarding **${activePatientName}** (e.g., "Has kidney function worsened?", "How many times was metformin prescribed?").`
+        : `Hello, Dr.! I am Swasthya AI Copilot. Mention a patient name or ask any grounded clinical question across your patient roster.`,
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
     },
   ]);
@@ -128,7 +128,7 @@ export const AICopilotDrawer: React.FC<AICopilotDrawerProps> = ({
                 </div>
                 <div>
                   <h3 className="font-semibold text-sm flex items-center gap-1.5">
-                    ClinIQ AI Copilot
+                    Swasthya AI Copilot
                     <span className="text-[10px] bg-blue-500/30 text-blue-200 px-2 py-0.5 rounded-full font-medium">
                       GPT-5 Nano
                     </span>
@@ -280,7 +280,7 @@ export const AICopilotDrawer: React.FC<AICopilotDrawerProps> = ({
               </div>
               <p className="text-[10px] text-slate-400 text-center mt-2 flex items-center justify-center gap-1">
                 <ShieldCheck className="w-3 h-3 text-emerald-600" />
-                ClinIQ Grounded RAG · Record-based evidence · Not a diagnostic tool
+                Swasthya Grounded RAG · Record-based evidence · Not a diagnostic tool
               </p>
             </div>
           </motion.div>

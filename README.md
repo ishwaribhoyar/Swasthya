@@ -1,4 +1,4 @@
-# ClinIQ 🏥
+# Swasthya 🏥
 ### *One Timeline. Every Record. Smarter Clinical Decisions.*
 
 [![Python](https://img.shields.io/badge/Python-3.11-blue?logo=python)](https://python.org)
@@ -12,7 +12,7 @@
 
 ## Overview
 
-**ClinIQ** is an AI-powered Clinical Intelligence Platform that unifies fragmented patient records — lab reports, prescriptions, vitals, and clinical notes — into a single longitudinal patient timeline enriched by clinical AI.
+**Swasthya** is an AI-powered Clinical Intelligence Platform that unifies fragmented patient records — lab reports, prescriptions, vitals, and clinical notes — into a single longitudinal patient timeline enriched by clinical AI.
 
 Built for **Problem Statement 3.3: AI-Driven Patient Record Analysis and Monitoring**.
 
@@ -21,7 +21,7 @@ Built for **Problem Statement 3.3: AI-Driven Patient Record Analysis and Monitor
 ## Architecture
 
 ```
-ClinIQ uses Clean Architecture + Domain-Driven Design (DDD)
+Swasthya uses Clean Architecture + Domain-Driven Design (DDD)
 
 hackathon/
 ├── backend/              Python 3.11 · FastAPI · SQLAlchemy · SQLite
@@ -125,12 +125,12 @@ cp .env.example .env     # macOS/Linux
 # python -c "import secrets; print(secrets.token_hex(32))"
 
 # Run development server
-uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+uvicorn app.main:app --reload --host 0.0.0.0 --port 8005
 ```
 
-Backend will be available at: http://localhost:8000  
-API Documentation: http://localhost:8000/docs  
-Health Check: http://localhost:8000/api/v1/health
+Backend will be available at: http://localhost:8005  
+API Documentation: http://localhost:8005/docs  
+Health Check: http://localhost:8005/api/v1/health
 
 ### Frontend Setup
 
@@ -148,7 +148,7 @@ cp .env.example .env     # macOS/Linux
 npm run dev
 ```
 
-Frontend will be available at: http://localhost:5173
+Frontend will be available at: http://localhost:3000
 
 ---
 

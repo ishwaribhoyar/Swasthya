@@ -1,33 +1,36 @@
 """
-Custom exception hierarchy for ClinIQ.
+Custom exception hierarchy for Swasthya.
 Maps domain exceptions directly to standard HTTP status codes.
 """
 from __future__ import annotations
 
-class ClinIQBaseException(Exception):
-    """Base exception for all ClinIQ errors."""
+class SwasthyaBaseException(Exception):
+    """Base exception for all Swasthya errors."""
     status_code: int = 400
 
-class NotFoundError(ClinIQBaseException):
+class NotFoundError(SwasthyaBaseException):
     """Resource not found."""
     status_code: int = 404
 
-class UnauthorizedError(ClinIQBaseException):
+class UnauthorizedError(SwasthyaBaseException):
     """Authentication failed or missing."""
     status_code: int = 401
 
-class ForbiddenError(ClinIQBaseException):
+class ForbiddenError(SwasthyaBaseException):
     """Insufficient permissions."""
     status_code: int = 403
 
-class ValidationError(ClinIQBaseException):
+class ValidationError(SwasthyaBaseException):
     """Data validation failed."""
     status_code: int = 422
 
-class ConflictError(ClinIQBaseException):
+class ConflictError(SwasthyaBaseException):
     """Resource conflict."""
     status_code: int = 409
 
-class InternalError(ClinIQBaseException):
+# Backward compatibility alias
+ClinIQBaseException = SwasthyaBaseException
+
+class InternalError(SwasthyaBaseException):
     """Internal server error."""
     status_code: int = 500

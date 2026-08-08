@@ -11,7 +11,7 @@ export const ROUTES = {
   SETTINGS: '/settings',
 } as const;
 
-export const APP_NAME = 'ClinIQ';
+export const APP_NAME = 'Swasthya';
 export const APP_VERSION = '1.0.0';
 
 export const PAGINATION = {

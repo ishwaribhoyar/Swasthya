@@ -7,7 +7,7 @@ from fastapi import Request, HTTPException, status
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 
-from app.core.exceptions import ClinIQBaseException
+from app.core.exceptions import SwasthyaBaseException
 from app.observability.logger import get_logger
 
 logger = get_logger(__name__)
@@ -33,7 +33,7 @@ def _add_cors_headers(request: Request, response: JSONResponse) -> JSONResponse:
     return response
 
 
-async def global_error_handler(request: Request, exc: ClinIQBaseException) -> JSONResponse:
+async def global_error_handler(request: Request, exc: SwasthyaBaseException) -> JSONResponse:
     """Handle custom application exceptions globally with standard envelope."""
     status_code = getattr(exc, "status_code", 400)
     logger.error("app_error", error=str(exc), status_code=status_code)

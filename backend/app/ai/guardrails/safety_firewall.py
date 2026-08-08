@@ -1,5 +1,5 @@
 """
-5-Layer Safety Firewall for ClinIQ Phase 5 Grounded AI Copilot.
+5-Layer Safety Firewall for Swasthya Phase 5 Grounded AI Copilot.
 
 Enforces production safety pipeline:
   Layer 1 — Input Guard: Detects prompt injection & instruction overrides.

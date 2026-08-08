@@ -1,0 +1,10 @@
+SWASTHYA MEDICAL RECORD — DUAL THERAPY ESCALATION RX
+Patient Name: Priya Sharma
+Document ID: c27e5ea6-b130-4d6e-9127-0bf54db7914d
+Date of Record: 2023-08-17
+Category: PRESCRIPTION
+============================================================
+
+PRESCRIPTION DETAILS:
+  • Metformin HCl 500mg — Dose: 1 tab, Freq: Twice daily (BID), Route: Oral, Duration: 90 days (After meals)
+  • Telmisartan 40mg — Dose: 1 tab, Freq: Once daily, Route: Oral, Duration: 90 days (Morning)

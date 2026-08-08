@@ -311,7 +311,7 @@ export default function AssistantPage() {
             </button>
           </div>
           <p className="text-center text-[11px] text-slate-400 mt-2">
-            ClinIQ AI Copilot provides grounded clinical record information and does not replace clinician judgment.
+            Swasthya AI Copilot provides grounded clinical record information and does not replace clinician judgment.
           </p>
         </div>
       </div>

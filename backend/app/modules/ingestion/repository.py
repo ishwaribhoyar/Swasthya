@@ -13,6 +13,9 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.modules.ingestion.model import UploadJob, Document, ProcessingLog
 
 
+from app.modules.patients.model import Patient
+
+
 class IngestionRepository:
     """Data-access layer for Document Ingestion."""
 
@@ -49,9 +52,13 @@ class IngestionRepository:
         return doc
 
     async def get_document_by_id(self, doc_id: str, clinician_id: str) -> Document | None:
-        stmt = select(Document).where(
-            Document.id == doc_id,
-            Document.clinician_id == clinician_id,
+        stmt = (
+            select(Document)
+            .join(Patient, Document.patient_id == Patient.id)
+            .where(
+                Document.id == doc_id,
+                or_(Document.clinician_id == clinician_id, Patient.clinician_id == clinician_id),
+            )
         )
         res = await self._session.execute(stmt)
         return res.scalar_one_or_none()

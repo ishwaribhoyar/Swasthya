@@ -1,0 +1,9 @@
+SWASTHYA MEDICAL RECORD — WELLNESS MAINTENANCE RX
+Patient Name: Arjun Mehta
+Document ID: 76d8aee0-a0f8-4c7e-ba49-f05e399a650b
+Date of Record: 2023-08-21
+Category: PRESCRIPTION
+============================================================
+
+PRESCRIPTION DETAILS:
+  • Omega-3 Fish Oil 1000mg — Dose: 1 cap, Freq: Once daily, Route: Oral, Duration: 90 days (With meals)

@@ -1,0 +1,9 @@
+SWASTHYA MEDICAL RECORD — ANNUAL PREVENTIVE PRESCRIPTION
+Patient Name: Arjun Mehta
+Document ID: 853c262b-6066-46f5-a4d8-4ea62e16a680
+Date of Record: 2024-08-23
+Category: PRESCRIPTION
+============================================================
+
+PRESCRIPTION DETAILS:
+  • Multivitamin Daily — Dose: 1 tab, Freq: Once daily, Route: Oral, Duration: 90 days (Morning)

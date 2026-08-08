@@ -1,0 +1,12 @@
+SWASTHYA MEDICAL RECORD — RENAL-ADJUSTED TRIPLE THERAPY RX
+Patient Name: Priya Sharma
+Document ID: 40d647b9-569a-4693-967c-aa1b7d85eec2
+Date of Record: 2025-08-23
+Category: PRESCRIPTION
+============================================================
+
+PRESCRIPTION DETAILS:
+  • Linagliptin 5mg — Dose: 1 tab, Freq: Once daily, Route: Oral, Duration: 90 days (Morning)
+  • Telmisartan 80mg — Dose: 1 tab, Freq: Once daily, Route: Oral, Duration: 90 days (Morning)
+  • Amlodipine 5mg — Dose: 1 tab, Freq: Once daily, Route: Oral, Duration: 90 days (Evening)
+  • Atorvastatin 20mg — Dose: 1 tab, Freq: Once daily, Route: Oral, Duration: 90 days (Bedtime)

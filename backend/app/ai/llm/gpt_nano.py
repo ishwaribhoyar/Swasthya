@@ -69,7 +69,7 @@ class GPTNanoResponse:
 
 
 class GPTNanoReasoningEngine:
-    """GPT-5 Nano Clinical Reasoning Engine for ClinIQ."""
+    """GPT-5 Nano Clinical Reasoning Engine for Swasthya."""
 
     @classmethod
     async def generate_response_async(
@@ -112,7 +112,7 @@ class GPTNanoReasoningEngine:
         if openai_key and openai_key.startswith("sk-"):
             try:
                 system_prompt = (
-                    "You are ClinIQ's GPT-5 Nano Clinical Decision Support AI.\n"
+                    "You are Swasthya's GPT-5 Nano Clinical Decision Support AI.\n"
                     "Your responses MUST be strictly grounded in the provided patient records and retrieved clinical context.\n"
                     "Be concise, evidence-based, professional, and clear. Cite specific lab values, document filenames, and vitals."
                 )

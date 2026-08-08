@@ -1,0 +1,18 @@
+SWASTHYA MEDICAL RECORD — BASELINE HEALTH DIAGNOSTIC PANEL
+Patient Name: Priya Sharma
+Document ID: 437f0655-6522-49b2-b829-9cfc39ea1410
+Date of Record: 2021-08-10
+Category: LAB
+============================================================
+
+LABORATORY TEST RESULTS:
+  • Hemoglobin: 13.5 g/dL (Ref: 12.0 - 17.5 g/dL)
+  • WBC: 6900 /uL (Ref: 4500 - 11000 /uL)
+  • Platelets: 240000 /uL (Ref: 150000 - 450000 /uL)
+  • Serum Creatinine: 0.9 mg/dL (Ref: 0.6 - 1.2 mg/dL)
+  • eGFR: 88 mL/min/1.73m2 (Ref: > 90 mL/min)
+  • HbA1c: 5.7 % (Ref: 4.0 - 5.6 %)
+  • Fasting Glucose: 98 mg/dL (Ref: 70 - 99 mg/dL)
+  • ALT: 28 U/L (Ref: 7 - 56 U/L)
+  • AST: 24 U/L (Ref: 8 - 40 U/L)
+  • CRP: 1.2 mg/L (Ref: < 3.0 mg/L)

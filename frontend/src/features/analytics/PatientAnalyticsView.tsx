@@ -203,7 +203,7 @@ export default function PatientAnalyticsView({ patientId }: PatientAnalyticsView
               <span className="text-[10px] uppercase font-bold text-slate-400 block">Trend Classification</span>
               <div>{getDirectionBadge(activeTrend.direction)}</div>
               <span className="text-xs text-slate-500 block">
-                Confidence: {(activeTrend.confidence * 100).toFixed(0)}%
+                Confidence: {((activeTrend.confidence ?? 1) * 100).toFixed(0)}%
               </span>
             </div>
 
@@ -211,25 +211,25 @@ export default function PatientAnalyticsView({ patientId }: PatientAnalyticsView
               <span className="text-[10px] uppercase font-bold text-slate-400 block">Longitudinal Shift</span>
               <div
                 className={`text-lg font-bold font-mono ${
-                  activeTrend.absolute_change > 0
+                  (activeTrend.absolute_change ?? 0) > 0
                     ? 'text-amber-600'
-                    : activeTrend.absolute_change < 0
+                    : (activeTrend.absolute_change ?? 0) < 0
                     ? 'text-blue-600'
                     : 'text-slate-700'
                 }`}
               >
-                {activeTrend.absolute_change > 0 ? `+${activeTrend.absolute_change}` : activeTrend.absolute_change}{' '}
-                {activeTrend.unit} ({activeTrend.percentage_change.toFixed(1)}%)
+                {(activeTrend.absolute_change ?? 0) > 0 ? `+${activeTrend.absolute_change}` : activeTrend.absolute_change ?? 0}{' '}
+                {activeTrend.unit} ({(activeTrend.percentage_change ?? 0).toFixed(1)}%)
               </div>
-              <span className="text-xs text-slate-500 block">Across {activeTrend.observation_count} points</span>
+              <span className="text-xs text-slate-500 block">Across {activeTrend.observation_count ?? 0} points</span>
             </div>
 
             <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm space-y-1">
               <span className="text-[10px] uppercase font-bold text-slate-400 block">Rate of Change</span>
               <div className="text-lg font-bold font-mono text-slate-800">
-                {activeTrend.rate_of_change_per_day.toFixed(3)} {activeTrend.unit}/day
+                {(activeTrend.rate_of_change_per_day ?? 0).toFixed(3)} {activeTrend.unit}/day
               </div>
-              <span className="text-xs text-slate-500 block">Time Span: {activeTrend.time_span_days} days</span>
+              <span className="text-xs text-slate-500 block">Time Span: {activeTrend.time_span_days ?? 0} days</span>
             </div>
           </div>
 
@@ -240,7 +240,7 @@ export default function PatientAnalyticsView({ patientId }: PatientAnalyticsView
               <span>{activeTrend.parameter_name} Time-Series Trend Curve</span>
             </h3>
 
-            {activeTrend.points.length < 2 ? (
+            {(activeTrend.points || []).length < 2 ? (
               <div className="p-8 text-center bg-slate-50 rounded-lg border border-slate-200 space-y-2">
                 <Info className="h-6 w-6 text-slate-400 mx-auto" />
                 <p className="text-xs text-slate-600 font-medium">
@@ -250,10 +250,11 @@ export default function PatientAnalyticsView({ patientId }: PatientAnalyticsView
               </div>
             ) : (
               <LineTrendChart
-                data={activeTrend.points}
+                data={activeTrend.points || []}
                 title={`${activeTrend.parameter_name} (${activeTrend.unit})`}
                 xKey="date"
                 yKey="value"
+                unit={activeTrend.unit}
                 color="#1D6FA4"
               />
             )}
@@ -277,7 +278,7 @@ export default function PatientAnalyticsView({ patientId }: PatientAnalyticsView
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100">
-                  {activeTrend.points.map((pt, pIdx) => (
+                  {(activeTrend.points || []).map((pt, pIdx) => (
                     <tr key={pIdx} className="hover:bg-slate-50/80 transition-colors">
                       <td className="py-3.5 px-4 font-mono text-xs font-semibold text-slate-700">{pt.date}</td>
                       <td className="py-3.5 px-4 font-mono font-bold text-slate-900">

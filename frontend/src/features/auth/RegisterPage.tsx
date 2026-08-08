@@ -39,7 +39,7 @@ export default function RegisterPage() {
     <div className="w-full bg-white p-8 rounded-xl shadow-sm border border-slate-100">
       <div className="mb-8 text-center">
         <h2 className="text-2xl font-bold text-slate-900">Create an account</h2>
-        <p className="text-slate-500 mt-2 text-sm">Join ClinIQ to manage your clinical practice</p>
+        <p className="text-slate-500 mt-2 text-sm">Join Swasthya to manage your clinical practice</p>
       </div>
 
       {error && (

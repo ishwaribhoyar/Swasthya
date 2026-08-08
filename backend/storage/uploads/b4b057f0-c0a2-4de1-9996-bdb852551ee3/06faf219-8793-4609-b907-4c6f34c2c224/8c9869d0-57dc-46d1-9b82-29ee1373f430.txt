@@ -1,0 +1,10 @@
+SWASTHYA MEDICAL RECORD — CURRENT ACTIVE WELLNESS PRESCRIPTION
+Patient Name: Arjun Mehta
+Document ID: 8c9869d0-57dc-46d1-9b82-29ee1373f430
+Date of Record: 2026-08-08
+Category: PRESCRIPTION
+============================================================
+
+PRESCRIPTION DETAILS:
+  • Multivitamin Daily — Dose: 1 tab, Freq: Once daily, Route: Oral, Duration: 90 days (With breakfast)
+  • Omega-3 Fish Oil 1000mg — Dose: 1 cap, Freq: Once daily, Route: Oral, Duration: 90 days (With meals)

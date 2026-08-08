@@ -1,0 +1,9 @@
+SWASTHYA MEDICAL RECORD — BASELINE CONSULTATION NOTE
+Patient Name: Priya Sharma
+Document ID: a3f5132d-b10a-46f8-a334-06f5c588bf41
+Date of Record: 2021-08-12
+Category: NOTES
+============================================================
+
+CLINICAL SUMMARY & OBSERVATIONS:
+Patient Priya Sharma evaluated for routine baseline health check. Borderline elevated Fasting Glucose (98 mg/dL) and HbA1c (5.7%). Advised lifestyle modification and low glycemic diet.

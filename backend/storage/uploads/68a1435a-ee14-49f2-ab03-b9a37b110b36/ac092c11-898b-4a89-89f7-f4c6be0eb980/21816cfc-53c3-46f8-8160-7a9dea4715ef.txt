@@ -1,0 +1,9 @@
+SWASTHYA MEDICAL RECORD — CURRENT NEPHROLOGY PROGRESS NOTE
+Patient Name: Priya Sharma
+Document ID: 21816cfc-53c3-46f8-8160-7a9dea4715ef
+Date of Record: 2026-02-15
+Category: NOTES
+============================================================
+
+CLINICAL SUMMARY & OBSERVATIONS:
+5-year longitudinal evaluation confirms progressive Stage 3b CKD (eGFR 44 mL/min, Creatinine 1.78 mg/dL) and worsening normocytic anemia (Hb 9.2 g/dL). Inflammatory markers elevated (CRP 6.3 mg/L). Blood pressure remains suboptimally controlled at 158/96 mmHg.

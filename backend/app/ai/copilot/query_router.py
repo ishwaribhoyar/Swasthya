@@ -1,5 +1,5 @@
 """
-Query Router & Intent Classification Engine for ClinIQ Phase 5.
+Query Router & Intent Classification Engine for Swasthya Phase 5.
 
 Classifies incoming clinician queries into specific intents:
   - PATIENT_SUMMARY

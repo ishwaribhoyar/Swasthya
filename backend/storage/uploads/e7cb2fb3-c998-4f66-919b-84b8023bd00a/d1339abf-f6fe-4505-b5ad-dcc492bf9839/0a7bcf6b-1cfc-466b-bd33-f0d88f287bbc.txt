@@ -1,0 +1,9 @@
+SWASTHYA MEDICAL RECORD — PREVENTIVE CONSULTATION NOTE
+Patient Name: Arjun Mehta
+Document ID: 0a7bcf6b-1cfc-466b-bd33-f0d88f287bbc
+Date of Record: 2022-02-10
+Category: NOTES
+============================================================
+
+CLINICAL SUMMARY & OBSERVATIONS:
+Follow-up check. No complaints. Vitals stable. Patient continues active lifestyle and balanced diet.

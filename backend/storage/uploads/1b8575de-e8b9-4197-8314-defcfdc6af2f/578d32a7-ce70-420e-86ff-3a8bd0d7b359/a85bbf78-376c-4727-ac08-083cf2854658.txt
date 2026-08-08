@@ -1,0 +1,13 @@
+SWASTHYA MEDICAL RECORD — CURRENT ACTIVE HIGH-RISK REGIMEN RX
+Patient Name: Priya Sharma
+Document ID: a85bbf78-376c-4727-ac08-083cf2854658
+Date of Record: 2026-08-08
+Category: PRESCRIPTION
+============================================================
+
+PRESCRIPTION DETAILS:
+  • Linagliptin 5mg — Dose: 1 tab, Freq: Once daily, Route: Oral, Duration: 90 days (Morning)
+  • Telmisartan 80mg — Dose: 1 tab, Freq: Once daily, Route: Oral, Duration: 90 days (Morning)
+  • Amlodipine 5mg — Dose: 1 tab, Freq: Once daily, Route: Oral, Duration: 90 days (Evening)
+  • Chlorthalidone 12.5mg — Dose: 1 tab, Freq: Once daily, Route: Oral, Duration: 90 days (Morning)
+  • Atorvastatin 40mg — Dose: 1 tab, Freq: Once daily, Route: Oral, Duration: 90 days (Bedtime)

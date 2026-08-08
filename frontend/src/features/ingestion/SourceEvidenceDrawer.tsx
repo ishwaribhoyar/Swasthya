@@ -505,6 +505,7 @@ export default function SourceEvidenceDrawer({
       }
     }).catch((err) => {
       console.error('Failed to load document provenance:', err);
+      setFileError(err?.response?.data?.detail || 'Document record unavailable or replaced during database re-indexing.');
     }).finally(() => setLoadingMeta(false));
 
     return releaseBlobUrl;

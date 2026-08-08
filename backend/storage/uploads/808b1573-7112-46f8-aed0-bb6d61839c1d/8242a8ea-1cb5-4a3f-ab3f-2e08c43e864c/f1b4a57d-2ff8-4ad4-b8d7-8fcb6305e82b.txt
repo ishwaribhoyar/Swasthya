@@ -1,0 +1,9 @@
+SWASTHYA MEDICAL RECORD — CLINICAL PROGRESS NOTE
+Patient Name: Priya Sharma
+Document ID: f1b4a57d-2ff8-4ad4-b8d7-8fcb6305e82b
+Date of Record: 2023-02-15
+Category: NOTES
+============================================================
+
+CLINICAL SUMMARY & OBSERVATIONS:
+Persistent blood pressure elevation (138/86 mmHg) and rising HbA1c (6.4%). Serum Creatinine increased to 1.15 mg/dL. Initiating Telmisartan 40mg daily for BP and renal protection.

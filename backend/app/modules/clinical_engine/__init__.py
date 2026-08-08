@@ -1,5 +1,5 @@
 """
-ClinIQ clinical_engine module.
+Swasthya clinical_engine module.
 """
 from __future__ import annotations
 

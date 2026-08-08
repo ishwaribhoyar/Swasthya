@@ -8,7 +8,7 @@ from typing import List, Optional
 
 class Settings(BaseSettings):
     """Main application settings."""
-    APP_NAME: str = "ClinIQ"
+    APP_NAME: str = "Swasthya"
     VERSION: str = "0.1.0"
     DEBUG: bool = False
     SECRET_KEY: str = Field(..., description="Secret key for JWT")

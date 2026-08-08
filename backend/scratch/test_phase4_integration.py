@@ -27,7 +27,7 @@ from app.modules.analytics.service import AnalyticsService
 
 async def main():
     print("=" * 80)
-    print("ClinIQ Phase 4 End-to-End Integration & Regression Verification")
+    print("Swasthya Phase 4 End-to-End Integration & Regression Verification")
     print("=" * 80)
 
     # 1. Init Database

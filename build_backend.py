@@ -16,9 +16,9 @@ def w(path_str, content):
 
 w('pyproject.toml', '''
 [project]
-name = "cliniq"
+name = "swasthya"
 version = "0.1.0"
-description = "ClinIQ Backend"
+description = "Swasthya Backend"
 readme = "README.md"
 requires-python = ">=3.11"
 
@@ -54,11 +54,11 @@ black
 ''')
 
 w('.env.example', '''
-APP_NAME=ClinIQ
+APP_NAME=Swasthya
 VERSION=0.1.0
 DEBUG=True
 SECRET_KEY=supersecretkeyexample
-DATABASE_URL=sqlite+aiosqlite:///./cliniq.db
+DATABASE_URL=sqlite+aiosqlite:///./swasthya.db
 CORS_ORIGINS=http://localhost:3000,http://localhost:8000
 ''')
 
@@ -86,7 +86,7 @@ from typing import List
 
 class Settings(BaseSettings):
     """Main application settings."""
-    APP_NAME: str = "ClinIQ"
+    APP_NAME: str = "Swasthya"
     VERSION: str = "0.1.0"
     DEBUG: bool = False
     SECRET_KEY: str = Field(..., description="Secret key for JWT")
@@ -185,35 +185,35 @@ def create_access_token(data: dict, expires_delta: timedelta | None = None) -> s
 
 w('app/core/exceptions.py', '''
 """
-Custom exception hierarchy for ClinIQ.
+Custom exception hierarchy for Swasthya.
 """
 from __future__ import annotations
 
-class ClinIQBaseException(Exception):
-    """Base exception for all ClinIQ errors."""
+class SwasthyaBaseException(Exception):
+    """Base exception for all Swasthya errors."""
     pass
 
-class NotFoundError(ClinIQBaseException):
+class NotFoundError(SwasthyaBaseException):
     """Resource not found."""
     pass
 
-class UnauthorizedError(ClinIQBaseException):
+class UnauthorizedError(SwasthyaBaseException):
     """Authentication failed or missing."""
     pass
 
-class ForbiddenError(ClinIQBaseException):
+class ForbiddenError(SwasthyaBaseException):
     """Insufficient permissions."""
     pass
 
-class ValidationError(ClinIQBaseException):
+class ValidationError(SwasthyaBaseException):
     """Data validation failed."""
     pass
 
-class ConflictError(ClinIQBaseException):
+class ConflictError(SwasthyaBaseException):
     """Resource conflict."""
     pass
 
-class InternalError(ClinIQBaseException):
+class InternalError(SwasthyaBaseException):
     """Internal server error."""
     pass
 ''')
@@ -494,12 +494,12 @@ Global error handler middleware.
 from __future__ import annotations
 from fastapi import Request
 from fastapi.responses import JSONResponse
-from app.core.exceptions import ClinIQBaseException
+from app.core.exceptions import SwasthyaBaseException
 from app.observability.logger import get_logger
 
 logger = get_logger(__name__)
 
-async def global_error_handler(request: Request, exc: ClinIQBaseException) -> JSONResponse:
+async def global_error_handler(request: Request, exc: SwasthyaBaseException) -> JSONResponse:
     """Handle custom application exceptions globally."""
     logger.error("app_error", error=str(exc))
     return JSONResponse(
@@ -631,9 +631,9 @@ MAX_ITEMS = 100
 Exceptions for the {mod} module.
 """
 from __future__ import annotations
-from app.core.exceptions import ClinIQBaseException
+from app.core.exceptions import SwasthyaBaseException
 
-class {mod.capitalize()}Error(ClinIQBaseException):
+class {mod.capitalize()}Error(SwasthyaBaseException):
     """Base exception for {mod}."""
     pass
 ''')
@@ -759,7 +759,7 @@ from app.core.config.settings import get_settings
 from app.shared.middlewares.cors import configure_cors
 from app.shared.middlewares.error_handler import global_error_handler
 from app.shared.middlewares.request_id import request_id_middleware
-from app.core.exceptions import ClinIQBaseException
+from app.core.exceptions import SwasthyaBaseException
 from app.shared.utils.helpers import utcnow
 
 @asynccontextmanager
@@ -774,7 +774,7 @@ def create_app() -> FastAPI:
     
     configure_cors(app)
     app.middleware("http")(request_id_middleware)
-    app.add_exception_handler(ClinIQBaseException, global_error_handler)
+    app.add_exception_handler(SwasthyaBaseException, global_error_handler)
     
     app.include_router(api_router, prefix="/api/v1")
     

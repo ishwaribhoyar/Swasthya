@@ -1,0 +1,9 @@
+SWASTHYA MEDICAL RECORD — LONGITUDINAL FOLLOW-UP CLINICAL NOTE
+Patient Name: Arjun Mehta
+Document ID: 5b0f6a82-89a3-41c3-b9ca-042ce75e2d89
+Date of Record: 2026-02-10
+Category: NOTES
+============================================================
+
+CLINICAL SUMMARY & OBSERVATIONS:
+5-year longitudinal review. Patient exhibits consistent hemodynamic stability, normal glycemic markers, and preserved renal function.

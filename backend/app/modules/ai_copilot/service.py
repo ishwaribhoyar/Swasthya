@@ -41,7 +41,7 @@ _log = get_logger(__name__)
 
 
 class AICopilotService:
-    """Service orchestrating the 12-stage Grounded RAG pipeline for ClinIQ Copilot."""
+    """Service orchestrating the 12-stage Grounded RAG pipeline for Swasthya Copilot."""
 
     def __init__(self, session: AsyncSession) -> None:
         self._session = session

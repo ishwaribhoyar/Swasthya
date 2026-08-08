@@ -1,0 +1,10 @@
+SWASTHYA MEDICAL RECORD — PREVENTIVE VITAMIN SUPPLEMENTATION
+Patient Name: Arjun Mehta
+Document ID: ab5a1f59-0ffd-4d89-b1c2-f21e8691e9fe
+Date of Record: 2021-08-16
+Category: PRESCRIPTION
+============================================================
+
+PRESCRIPTION DETAILS:
+  • Multivitamin Daily — Dose: 1 tab, Freq: Once daily, Route: Oral, Duration: 30 days (With breakfast)
+  • Vitamin D3 1000IU — Dose: 1 cap, Freq: Once daily, Route: Oral, Duration: 30 days (With food)

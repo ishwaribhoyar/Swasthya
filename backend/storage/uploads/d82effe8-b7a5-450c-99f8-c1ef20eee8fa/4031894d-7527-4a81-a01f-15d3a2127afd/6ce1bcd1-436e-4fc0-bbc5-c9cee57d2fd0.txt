@@ -1,0 +1,11 @@
+SWASTHYA MEDICAL RECORD — POST-DISCHARGE ESCALATED REGIMEN RX
+Patient Name: Priya Sharma
+Document ID: 6ce1bcd1-436e-4fc0-bbc5-c9cee57d2fd0
+Date of Record: 2024-08-19
+Category: PRESCRIPTION
+============================================================
+
+PRESCRIPTION DETAILS:
+  • Metformin HCl 1000mg — Dose: 1 tab, Freq: Twice daily (BID), Route: Oral, Duration: 90 days (With meals)
+  • Telmisartan 80mg — Dose: 1 tab, Freq: Once daily, Route: Oral, Duration: 90 days (Morning)
+  • Atorvastatin 20mg — Dose: 1 tab, Freq: Once daily, Route: Oral, Duration: 90 days (Bedtime)

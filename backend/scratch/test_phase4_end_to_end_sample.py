@@ -97,7 +97,7 @@ SpO2: 96%
 
 async def main():
     print("=" * 90)
-    print("CLINIQ PHASE 4 END-TO-END SAMPLE DATA VERIFICATION")
+    print("SWASTHYA PHASE 4 END-TO-END SAMPLE DATA VERIFICATION")
     print("=" * 90)
 
     await init_db()
@@ -111,7 +111,7 @@ async def main():
         analytics_service = AnalyticsService(session)
 
         # 1. Register test clinician
-        email = f"dr.phase4.test_{uuid.uuid4().hex[:6]}@cliniq.med"
+        email = f"dr.phase4.test_{uuid.uuid4().hex[:6]}@swasthya.med"
         token_res = await auth_service.register(
             RegisterRequest(
                 email=email,

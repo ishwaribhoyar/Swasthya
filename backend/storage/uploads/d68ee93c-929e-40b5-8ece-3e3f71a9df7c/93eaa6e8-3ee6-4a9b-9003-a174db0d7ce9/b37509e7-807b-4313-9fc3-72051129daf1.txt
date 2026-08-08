@@ -1,0 +1,18 @@
+SWASTHYA MEDICAL RECORD — COMPREHENSIVE RENAL & METABOLIC PANEL
+Patient Name: Priya Sharma
+Document ID: b37509e7-807b-4313-9fc3-72051129daf1
+Date of Record: 2023-08-16
+Category: LAB
+============================================================
+
+LABORATORY TEST RESULTS:
+  • Hemoglobin: 12.4 g/dL (Ref: 12.0 - 17.5 g/dL)
+  • WBC: 7400 /uL (Ref: 4500 - 11000 /uL)
+  • Platelets: 225000 /uL (Ref: 150000 - 450000 /uL)
+  • Serum Creatinine: 1.18 mg/dL (Ref: 0.6 - 1.2 mg/dL)
+  • eGFR: 72 mL/min/1.73m2 (Ref: > 90 mL/min)
+  • HbA1c: 6.4 % (Ref: 4.0 - 5.6 %)
+  • Fasting Glucose: 118 mg/dL (Ref: 70 - 99 mg/dL)
+  • ALT: 35 U/L (Ref: 7 - 56 U/L)
+  • AST: 29 U/L (Ref: 8 - 40 U/L)
+  • CRP: 2.6 mg/L (Ref: < 3.0 mg/L)

@@ -1,5 +1,5 @@
 """
-Context Builder & System Safety Prompt Assembly Engine for ClinIQ Phase 5.
+Context Builder & System Safety Prompt Assembly Engine for Swasthya Phase 5.
 
 Assembles token-budgeted grounded context objects containing:
   - Patient Identity Context
@@ -16,8 +16,8 @@ from app.observability.logger import get_logger
 _log = get_logger(__name__)
 
 # Base Grounded Medical Assistant System Prompt
-CLINIQ_COPILOT_SYSTEM_PROMPT = """
-You are the ClinIQ AI Copilot, a grounded clinical information assistant.
+SWASTHYA_COPILOT_SYSTEM_PROMPT = """
+You are the Swasthya AI Copilot, a grounded clinical information assistant.
 You provide clear, accurate summaries and answers strictly using the provided patient's stored medical records and evidence.
 
 STRICT CLINICAL RULES:
@@ -60,7 +60,7 @@ class ContextBuilder:
     def build_general_info_context(cls, query_text: str, target_medicine: Optional[str]) -> GroundedContextPackage:
         """Construct context for general medical knowledge questions."""
         sys_p = (
-            "You are ClinIQ AI Copilot providing general medical information.\n"
+            "You are Swasthya AI Copilot providing general medical information.\n"
             "Keep the response educational, concise, and clearly labeled as General Medical Information.\n"
             "State clearly that this is general information and not part of any specific patient's record."
         )
@@ -111,7 +111,7 @@ class ContextBuilder:
         )
 
         return GroundedContextPackage(
-            system_prompt=CLINIQ_COPILOT_SYSTEM_PROMPT,
+            system_prompt=SWASTHYA_COPILOT_SYSTEM_PROMPT,
             user_prompt=user_p,
             evidence_summary=evidence_text,
             sources=sources,

@@ -7,6 +7,7 @@ from typing import List, Optional
 from sqlalchemy import select, func, desc
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from sqlalchemy.orm import selectinload
 from app.modules.medicine_engine.prescription_model import Prescription, PrescriptionMedicine
 from app.modules.medicine_engine.schema import (
     PrescriptionRead,
@@ -28,6 +29,7 @@ class MedicineService:
         """Fetch all prescriptions for a patient, ordered by prescription_date descending."""
         stmt = (
             select(Prescription)
+            .options(selectinload(Prescription.medicines))
             .where(
                 Prescription.patient_id == patient_id,
                 Prescription.clinician_id == clinician_id,

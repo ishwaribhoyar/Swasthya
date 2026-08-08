@@ -1,0 +1,18 @@
+SWASTHYA MEDICAL RECORD — ANNUAL EXECUTIVE HEALTH SCREENING
+Patient Name: Arjun Mehta
+Document ID: 621883b5-e364-433d-b5d5-a73aaae558bd
+Date of Record: 2023-08-20
+Category: LAB
+============================================================
+
+LABORATORY TEST RESULTS:
+  • Hemoglobin: 15.0 g/dL (Ref: 12.0 - 17.5 g/dL)
+  • WBC: 6600 /uL (Ref: 4500 - 11000 /uL)
+  • Platelets: 240000 /uL (Ref: 150000 - 450000 /uL)
+  • Serum Creatinine: 0.89 mg/dL (Ref: 0.6 - 1.2 mg/dL)
+  • eGFR: 101 mL/min/1.73m2 (Ref: > 90 mL/min)
+  • HbA1c: 5.3 % (Ref: 4.0 - 5.6 %)
+  • Fasting Glucose: 95 mg/dL (Ref: 70 - 99 mg/dL)
+  • ALT: 23 U/L (Ref: 7 - 56 U/L)
+  • AST: 21 U/L (Ref: 8 - 40 U/L)
+  • CRP: 0.8 mg/L (Ref: < 3.0 mg/L)

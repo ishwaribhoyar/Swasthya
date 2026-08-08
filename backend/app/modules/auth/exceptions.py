@@ -2,8 +2,8 @@
 Exceptions for the auth module.
 """
 from __future__ import annotations
-from app.core.exceptions import ClinIQBaseException
+from app.core.exceptions import SwasthyaBaseException
 
-class AuthError(ClinIQBaseException):
+class AuthError(SwasthyaBaseException):
     """Base exception for auth."""
     pass

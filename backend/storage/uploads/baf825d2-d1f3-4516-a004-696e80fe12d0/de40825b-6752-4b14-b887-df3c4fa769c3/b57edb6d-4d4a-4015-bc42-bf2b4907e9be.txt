@@ -1,0 +1,13 @@
+SWASTHYA MEDICAL RECORD — ROUTINE VITALS SHEET
+Patient Name: Arjun Mehta
+Document ID: b57edb6d-4d4a-4015-bc42-bf2b4907e9be
+Date of Record: 2022-05-14
+Category: VITALS
+============================================================
+
+VITAL SIGNS SHEET:
+  • Blood Pressure: 122/76 mmHg
+  • Heart Rate: 74 bpm
+  • SpO2: 98.0 %
+  • Temperature: 36.5 °C
+  • BMI: 23.6 kg/m2

@@ -1,0 +1,18 @@
+SWASTHYA MEDICAL RECORD — CURRENT 2026 COMPREHENSIVE DIAGNOSTIC PANEL
+Patient Name: Priya Sharma
+Document ID: 492d4696-973f-424f-87c9-dfebb953adc5
+Date of Record: 2026-08-08
+Category: LAB
+============================================================
+
+LABORATORY TEST RESULTS:
+  • Hemoglobin: 9.2 g/dL (Ref: 12.0 - 17.5 g/dL)
+  • WBC: 8500 /uL (Ref: 4500 - 11000 /uL)
+  • Platelets: 198000 /uL (Ref: 150000 - 450000 /uL)
+  • Serum Creatinine: 1.78 mg/dL (Ref: 0.6 - 1.2 mg/dL)
+  • eGFR: 44 mL/min/1.73m2 (Ref: > 90 mL/min)
+  • HbA1c: 7.6 % (Ref: 4.0 - 5.6 %)
+  • Fasting Glucose: 158 mg/dL (Ref: 70 - 99 mg/dL)
+  • ALT: 45 U/L (Ref: 7 - 56 U/L)
+  • AST: 38 U/L (Ref: 8 - 40 U/L)
+  • CRP: 6.3 mg/L (Ref: < 3.0 mg/L)

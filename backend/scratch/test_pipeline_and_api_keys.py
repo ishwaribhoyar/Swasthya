@@ -32,7 +32,7 @@ from fastapi import UploadFile
 
 async def run_system_verification():
     print("=========================================================================")
-    print("ClinIQ Full System Verification & API Key Validation")
+    print("Swasthya Full System Verification & API Key Validation")
     print("=========================================================================\n")
 
     settings = get_settings()

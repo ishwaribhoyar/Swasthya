@@ -1,0 +1,9 @@
+SWASTHYA MEDICAL RECORD — INPATIENT EPISODE SUMMARY - ACUTE KIDNEY STRESS
+Patient Name: Priya Sharma
+Document ID: 1e0d39c6-aa93-4580-9130-234085ab789e
+Date of Record: 2025-06-20
+Category: DISCHARGE
+============================================================
+
+CLINICAL SUMMARY & OBSERVATIONS:
+Admission: 2025-06-18 | Discharge: 2025-06-20. Reason: Acute kidney stress secondary to gastroenteritis & volume depletion. Creatinine peaked at 1.72 mg/dL, improved to 1.55 mg/dL following rehydration. Discharged with adjusted antihypertensive therapy.

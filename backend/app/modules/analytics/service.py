@@ -40,13 +40,16 @@ class AnalyticsService:
 
         trends: List[ParameterTrendRead] = []
         critical_cnt = 0
+        active_anomalies_list: List[str] = []
 
         for p_name, p_items in series_map.items():
             t_res = TrendEngine.analyze_parameter_series(p_name, p_items)
             trend_schema = ParameterTrendRead.model_validate(t_res.to_dict())
             trends.append(trend_schema)
-            if t_res.anomaly or t_res.risk_level == "CRITICAL":
-                critical_cnt += 1
+            if t_res.anomalies:
+                critical_cnt += len(t_res.anomalies)
+                for an in t_res.anomalies:
+                    active_anomalies_list.append(f"{p_name}: {an}")
 
         _log.info(
             "ANALYTICS.TRENDS_LOADED",
@@ -59,5 +62,6 @@ class AnalyticsService:
             patient_id=patient_id,
             total_parameters_tracked=len(trends),
             critical_anomalies_count=critical_cnt,
+            active_anomalies=active_anomalies_list,
             parameter_trends=trends,
         )

@@ -1,0 +1,18 @@
+SWASTHYA MEDICAL RECORD — POST-DISCHARGE RENAL & LIPID DIAGNOSTIC PANEL
+Patient Name: Priya Sharma
+Document ID: c22fc823-396d-407d-b454-e93ae9811c9a
+Date of Record: 2024-08-18
+Category: LAB
+============================================================
+
+LABORATORY TEST RESULTS:
+  • Hemoglobin: 11.2 g/dL (Ref: 12.0 - 17.5 g/dL)
+  • WBC: 7800 /uL (Ref: 4500 - 11000 /uL)
+  • Platelets: 215000 /uL (Ref: 150000 - 450000 /uL)
+  • Serum Creatinine: 1.38 mg/dL (Ref: 0.6 - 1.2 mg/dL)
+  • eGFR: 61 mL/min/1.73m2 (Ref: > 90 mL/min)
+  • HbA1c: 6.9 % (Ref: 4.0 - 5.6 %)
+  • Fasting Glucose: 132 mg/dL (Ref: 70 - 99 mg/dL)
+  • ALT: 38 U/L (Ref: 7 - 56 U/L)
+  • AST: 31 U/L (Ref: 8 - 40 U/L)
+  • CRP: 3.8 mg/L (Ref: < 3.0 mg/L)

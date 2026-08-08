@@ -1,0 +1,9 @@
+SWASTHYA MEDICAL RECORD — CONSULTATION NOTE - WELLNESS REVIEW
+Patient Name: Arjun Mehta
+Document ID: e8126ef7-cbdd-4bdf-b888-9a5aa9eed18d
+Date of Record: 2023-02-12
+Category: NOTES
+============================================================
+
+CLINICAL SUMMARY & OBSERVATIONS:
+Annual review. Arjun Mehta reports regular aerobic exercise and normal sleep patterns. No gastrointestinal or urinary symptoms.

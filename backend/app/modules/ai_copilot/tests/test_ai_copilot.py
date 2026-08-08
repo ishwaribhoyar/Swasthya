@@ -1,5 +1,5 @@
 """
-Automated PyTest Suite for ClinIQ Phase 5 Grounded RAG & AI Copilot.
+Automated PyTest Suite for Swasthya Phase 5 Grounded RAG & AI Copilot.
 
 Tests:
   - Patient Resolver (Name, MRN, Ambiguous list, Cross-Clinician security)
@@ -88,7 +88,7 @@ async def test_patient_resolver_ambiguity_and_security(db_session):
     # Register two real test clinicians
     c1 = await auth_service.register(
         RegisterRequest(
-            email="dr.copilot.c1@cliniq.med",
+            email="dr.copilot.c1@swasthya.med",
             password="TestPassword123!",
             first_name="Dr. Alpha",
             last_name="Smith",
@@ -96,7 +96,7 @@ async def test_patient_resolver_ambiguity_and_security(db_session):
     )
     c2 = await auth_service.register(
         RegisterRequest(
-            email="dr.copilot.c2@cliniq.med",
+            email="dr.copilot.c2@swasthya.med",
             password="TestPassword123!",
             first_name="Dr. Beta",
             last_name="Jones",
