@@ -31,7 +31,8 @@ class GPT5NanoClient:
             _log.warning("OPENAI_API_KEY is not configured or invalid.")
             self._client = None
         else:
-            self._client = AsyncOpenAI(api_key=self.api_key)
+            # Set 5s timeout to ensure fast fallback on network/connection issues
+            self._client = AsyncOpenAI(api_key=self.api_key, timeout=5.0)
 
     def is_configured(self) -> bool:
         """Return True if OpenAI API key is present."""
