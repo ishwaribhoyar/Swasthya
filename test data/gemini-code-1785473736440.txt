@@ -1,0 +1,75 @@
+====================================================================================================
+                       METRO GENERAL HOSPITAL DIAGNOSTICS
+                   Department of Pathology & Laboratory Medicine
+           450 Healthcare Boulevard, Suite 200, Chicago, IL 60611
+    Phone: (312) 555-0188 | Web: www.metrogeneral-dx.org | CLIA ID: 14D0982311 | CAP: 7192041
+====================================================================================================
+
+PATIENT DEMOGRAPHICS & ACCESSION DETAILS
+----------------------------------------------------------------------------------------------------
+Patient Name    : Elena Rostova                      Barcode ID          : *HL-20260315-0001*
+Patient ID      : PAT-00001                          Report Number       : RPT-2026-01982
+Visit ID        : VST-88104                          Sample Type         : Venous Whole Blood & Serum
+Age / Gender    : 52 Yrs / Female                    Collection Time     : 2026-03-15 07:15 CST
+Height / Weight : 165 cm / 78.5 kg                   Received Time       : 2026-03-15 08:30 CST
+BMI             : 28.8 kg/m² (Overweight)            Validation Status   : Final / Verified
+Blood Group     : A-Positive                         Ordering Physician  : Dr. Arthur Vance, MD
+Ethnicity       : Caucasian                          Analyzing Instrument: Roche Cobas 8000 c702
+Occupation      : High School Teacher                Primary Technician  : S. Miller, MT (ASCP)
+Location        : Chicago, IL, USA                   Attending Pathologist: Dr. Karen O'Connor, MD
+Lifestyle       : Non-smoker | Occasional Alcohol | Low Activity | Standard Western Diet
+----------------------------------------------------------------------------------------------------
+
+COMPREHENSIVE METABOLIC, LIPID & RENAL EVALUATION PANEL
+----------------------------------------------------------------------------------------------------
+TEST PARAMETER              RESULT     UNITS       REFERENCE RANGE    FLAG      METHODOLOGY
+----------------------------------------------------------------------------------------------------
+GLYCOSYLATED HEMOGLOBIN (HbA1c)
+  HbA1c                     8.2        %           4.0 - 5.6          HIGH      HPLC
+  Estimated Avg Glucose    189        mg/dL       70 - 114           HIGH      Calculated
+
+FASTING METABOLIC PANEL
+  Fasting Blood Glucose     164        mg/dL       70 - 99            HIGH      Hexokinase
+  Fasting Insulin           21.4       µIU/mL      2.6 - 24.9         NORMAL    ECLIA
+
+LIPID PROFILE
+  Total Cholesterol         242        mg/dL       125 - 200          HIGH      Enzymatic Colorimetric
+  Triglycerides             215        mg/dL       < 150              HIGH      Enzymatic GPO-PAP
+  HDL Cholesterol           38         mg/dL       > 50               LOW       Direct Homogeneous
+  LDL Cholesterol (Direct)  161        mg/dL       < 100              HIGH      Direct Homogeneous
+  Non-HDL Cholesterol       204        mg/dL       < 130              HIGH      Calculated
+
+RENAL FUNCTION TEST (KFT)
+  Serum Creatinine          1.38       mg/dL       0.59 - 1.04        HIGH      Jaffé Kinetic
+  Blood Urea Nitrogen (BUN) 26.4       mg/dL       7.0 - 20.0         HIGH      Urease-GLDH
+  eGFR (CKD-EPI 2021)       51         mL/min/1.73m² > 60             LOW       Calculated
+  Serum Sodium              139        mmol/L      136 - 145          NORMAL    ISE Indirect
+  Serum Potassium           4.8        mmol/L      3.5 - 5.1          NORMAL    ISE Indirect
+
+MICRONUTRIENT PROFILE
+  25-OH Vitamin D Total     16.2       ng/mL       30.0 - 100.0       DEFICIENT CLIA
+  Vitamin B12               310        pg/mL       200 - 911          NORMAL    ECLIA
+
+INFLAMMATORY MARKERS
+  hs-CRP                    4.2        mg/L        < 1.0              HIGH      Immunoturbidimetric
+----------------------------------------------------------------------------------------------------
+
+CLINICAL INTERPRETATION & PATHOLOGIST NOTES
+----------------------------------------------------------------------------------------------------
+1. GLYCEMIC STATUS: Uncontrolled hyperglycemia noted with HbA1c at 8.2% and Fasting Blood Glucose 
+   at 164 mg/dL. Findings meet diagnostic criteria for uncontrolled Type 2 Diabetes Mellitus.
+2. DYSPLIPIDEMIA: Atherogenic lipid profile characterized by hypertriglyceridemia, elevated LDL-C, 
+   and sub-optimal HDL-C. High cardiovascular risk profile.
+3. RENAL FUNCTION: Decreased eGFR (51 mL/min/1.73m²) and elevated Serum Creatinine (1.38 mg/dL) 
+   indicate Stage 3a Chronic Kidney Disease, likely secondary to diabetic nephropathy.
+4. MICRONUTRIENTS & INFLAMMATION: Moderate Vitamin D insufficiency noted. hs-CRP of 4.2 mg/L 
+   reflects active low-grade vascular inflammation.
+
+RECOMENDATIONS: Clinical correlation recommended. Correlate with spot urine albumin-to-creatinine 
+ratio (UACR). Dietary modification, glycemic stabilization, and endocrinology/nephrology consult 
+advised.
+----------------------------------------------------------------------------------------------------
+Report Electronically Authenticated By:
+Dr. Karen O'Connor, MD (Chief Pathologist, Lic #IL-992031)
+Date/Time: 2026-03-15 10:45 CST
+====================================================================================================

@@ -1,0 +1,16 @@
+
+DIAGNOSTICS & CLINICAL CARE CENTER
+PATIENT: John Doe | AGE: 45 | GENDER: Male
+SAMPLE COLLECTION DATE: 01 July 2026
+VISIT TYPE: Follow-up Consultation
+
+LABORATORY INVESTIGATIONS:
+Serum Potassium: 5.4 mEq/L (Reference: 3.5 - 5.0 mEq/L) [HIGH]
+Serum Creatinine: 1.6 mg/dL (Reference: 0.6 - 1.2 mg/dL) [HIGH]
+Fasting Glucose: 135 mg/dL (Reference: 70 - 99 mg/dL) [HIGH]
+Hemoglobin: 13.8 g/dL (Reference: 12.0 - 17.5 g/dL) [NORMAL]
+
+PHYSICAL VITALS:
+Blood Pressure: 135/88 mmHg
+Heart Rate: 78 bpm
+SpO2: 97%

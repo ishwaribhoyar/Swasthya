@@ -1,0 +1,16 @@
+=== PATHOQUEST PRECISN LABS ===
+DOC ID: HL-LAB-2026-0042_CORRUPT
+PATIENT: Ar1s Th0rne | ID: PAT--00042 | AGE:54
+
+PARAMETR               RESUT      UNT        REF RANGE
+------------------------------------------------------
+Glycatd Hemglobn       8.4        %          4.0-5.6
+Fasting Glucse         178                   70 - 99
+Totl Cholestrol        248        mg/dL
+Triglycerdes           21O        mg/dL      <150
+HDL Chlesterol         34         mg/dL      >40
+SERUM CREATININE       1.48                  0.74 - 1.35
+25-OH VitD             14.2       ng/mL      30.0 - 100.0
+hs-CRP                 4,8        mg/L       <1.0
+
+NOTE: Samp|e hemolyzed 5%. Tech: M_Jenkns. DR: E.Vance

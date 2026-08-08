@@ -1,0 +1,23 @@
+{
+  "document_id": "HL-LAB-2026-0001",
+  "rag_test_cases": [
+    {
+      "question": "Why is my HbA1c high and what does 8.2% mean?",
+      "expected_answer": "Your HbA1c is 8.2%, which is well above the target range of 4.0-5.6%. This indicates an estimated average blood sugar level of 189 mg/dL over the past 2 to 3 months, placing you in the uncontrolled Type 2 Diabetes range.",
+      "expected_evidence": "HbA1c = 8.2 %, Estimated Avg Glucose = 189 mg/dL (Reference Range: 4.0 - 5.6 %)",
+      "citation_source": "HL-LAB-2026-0001.txt, Lines 24-25"
+    },
+    {
+      "question": "Is my kidney health affected based on this blood work?",
+      "expected_answer": "Yes, your kidney markers show signs of reduced function. Your Serum Creatinine is high at 1.38 mg/dL (normal: 0.59-1.04 mg/dL) and your eGFR is reduced to 51 mL/min/1.73m², which corresponds to Stage 3a Chronic Kidney Disease.",
+      "expected_evidence": "Serum Creatinine = 1.38 mg/dL, eGFR (CKD-EPI 2021) = 51 mL/min/1.73m²",
+      "citation_source": "HL-LAB-2026-0001.txt, Lines 38-40"
+    },
+    {
+      "question": "What questions should I ask my doctor about my cholesterol and Vitamin D?",
+      "expected_answer": "1. What medication or dietary changes should I start to lower my LDL cholesterol (161 mg/dL) and triglycerides (215 mg/dL)?\n2. Do I need a prescription-strength Vitamin D supplement for my deficient level of 16.2 ng/mL?\n3. Are my cholesterol levels accelerating the stress on my kidneys?",
+      "expected_evidence": "LDL Cholesterol = 161 mg/dL, Triglycerides = 215 mg/dL, 25-OH Vitamin D = 16.2 ng/mL",
+      "citation_source": "HL-LAB-2026-0001.txt, Lines 32-35, 43"
+    }
+  ]
+}

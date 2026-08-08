@@ -1,0 +1,53 @@
+================================================================================
+HEALTHLENS AI LONGITUDINAL PATIENT TRACKING REPORT
+================================================================================
+Patient ID   : PAT-00042
+Patient Name : Aris Thorne
+Tracking Period: 2024-06-10 to 2026-06-12 (24 Months)
+Total Visits : 4 Diagnostic Encounters
+================================================================================
+
+[VISIT 1] Baseline Encounter - 2024-06-10
+--------------------------------------------------------------------------------
+Facility     : Metro General Diagnostics
+HbA1c        : 6.8 % (Elevated)
+FGlucose     : 122 mg/dL (Elevated)
+Total Chol   : 210 mg/dL (Borderline)
+Creatinine   : 1.10 mg/dL (Normal)
+Vit D        : 22.0 ng/mL (Insufficient)
+Health Score : 74/100 (Moderate Risk)
+Clinical Status: Early Diabetes onset; lifestyle modification recommended.
+
+[VISIT 2] Follow-Up Encounter - 2025-01-14
+--------------------------------------------------------------------------------
+Facility     : PathQuest Precision Labs
+HbA1c        : 7.4 % (Worsening)
+FGlucose     : 145 mg/dL (Elevated)
+Total Chol   : 225 mg/dL (High)
+Creatinine   : 1.22 mg/dL (High Normal)
+Vit D        : 18.5 ng/mL (Insufficient)
+Health Score : 62/100 (Moderate Risk)
+Clinical Status: Sub-optimal compliance with diet; oral monotherapy initiated.
+
+[VISIT 3] Acute Escalation - 2025-11-20
+--------------------------------------------------------------------------------
+Facility     : Apex Specialty Healthcare
+HbA1c        : 9.1 % (Critical Escalation)
+FGlucose     : 205 mg/dL (High)
+Total Chol   : 265 mg/dL (High)
+Creatinine   : 1.55 mg/dL (Elevated - Renal Strain)
+Vit D        : 11.0 ng/mL (Deficient)
+Health Score : 38/100 (Critical Risk)
+Clinical Status: Significant metabolic decompensation; therapy intensification.
+
+[VISIT 4] Current Evaluation - 2026-06-12
+--------------------------------------------------------------------------------
+Facility     : PathQuest Precision Labs
+HbA1c        : 8.4 % (Partial Improvement)
+FGlucose     : 178 mg/dL (Elevated)
+Total Chol   : 248 mg/dL (High)
+Creatinine   : 1.48 mg/dL (Elevated)
+Vit D        : 14.2 ng/mL (Deficient)
+Health Score : 48/100 (High Risk)
+Clinical Status: Glycemic trend responding to dual-agent therapy; renal strain persists.
+================================================================================

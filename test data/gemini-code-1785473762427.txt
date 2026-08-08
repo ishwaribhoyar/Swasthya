@@ -1,0 +1,54 @@
+================================================================================
+APEX SPECIALTY HEALTHCARE CLINIC
+Department of Endocrinology & Internal Medicine
+750 University Avenue, Boston, MA 02115 | Tel: (617) 555-0144
+================================================================================
+PRESCRIPTION & CLINICAL TREATMENT PLAN
+
+Rx ID        : RX-2026-0018                   Date           : 2026-06-13
+Patient Name : Aris Thorne                    Patient ID     : PAT-00042
+Age / Gender : 54 / Male                      Vitals         : BP 138/86, HR 74
+Diagnosis    : 1. Type 2 Diabetes Mellitus (E11.9)
+               2. Diabetic Nephropathy, Stage 3a (E11.22)
+               3. Mixed Hyperlipidemia (E78.2)
+================================================================================
+MEDICATION ORDERS
+--------------------------------------------------------------------------------
+1. Metformin HCl Extended-Release (Glucophage XR)
+   Strength : 1000 mg
+   Route    : Oral
+   Frequency: Twice Daily (With Meals - Morning & Evening)
+   Duration : 90 Days
+   Dispense : 180 Tablets (Refills: 3)
+
+2. Empagliflozin (Jardiance)
+   Strength : 10 mg
+   Route    : Oral
+   Frequency: Once Daily (Morning)
+   Duration : 90 Days
+   Dispense : 90 Tablets (Refills: 3)
+
+3. Atorvastatin Calcium (Lipitor)
+   Strength : 20 mg
+   Route    : Oral
+   Frequency: Once Daily (At Bedtime)
+   Duration : 90 Days
+   Dispense : 90 Tablets (Refills: 3)
+
+4. Ergocalciferol (Vitamin D2)
+   Strength : 50,000 IU
+   Route    : Oral
+   Frequency: Once Weekly (Every Sunday with food)
+   Duration : 8 Weeks
+   Dispense : 8 Capsules (Refills: 0)
+================================================================================
+PHYSICIAN NOTES & FOLLOW-UP INSTRUCTIONS
+--------------------------------------------------------------------------------
+- Dietary Caution: Low glycemic index, sodium-restricted diet (< 2000 mg/day).
+- Hydration: Maintain minimum fluid intake of 2.5 Liters water daily.
+- Repeat Renal Panel (Creatinine, Electrolytes, eGFR) and HbA1c in 60 days.
+- Schedule follow-up consultation on: August 15, 2026.
+
+Physician Name : Dr. Evelyn Vance, MD (Lic # MD-8820419)
+Signature      : [Digital Signature Verified - EVance_MD]
+================================================================================

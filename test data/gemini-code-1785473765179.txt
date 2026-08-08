@@ -1,0 +1,45 @@
+================================================================================
+PATHOQUEST PRECISION DIAGNOSTICS
+104 Healthcare Boulevard, Suite 300, New York, NY 10016
+Phone: (212) 555-0199 | Accreditation: CAP #8829104 / CLIA #36D2049182
+================================================================================
+PATIENT DEMOGRAPHICS & ACCESSION METADATA
+--------------------------------------------------------------------------------
+Patient Name   : Aris Thorne                 Barcode ID      : *HL-8830192-X*
+Patient ID     : PAT-00042                   Report Number   : RPT-2026-99104
+Age / Sex      : 54 Yrs / Male               Visit ID        : VST-88102
+Height / Weight: 178 cm / 92.4 kg (BMI 29.2) Collection Time : 2026-06-12 07:30 EST
+Blood Group    : O-Positive                  Validation Time : 2026-06-12 11:15 EST
+Ethnicity      : South Asian                 Sample Type     : Venous Whole Blood / Serum
+Occupation     : Systems Architect           Machine Name    : Roche Cobas 8000 c702
+Address        : New York, NY, USA           Technician      : M. Jenkins, MT(ASCP)
+Smoking / Alc  : Former (5 pk-yrs) / Mod.    Ordering Doctor : Dr. Evelyn Vance, MD
+================================================================================
+TEST RESULTS: MASTER METABOLIC & LIPID COMPREHENSIVE PANEL
+--------------------------------------------------------------------------------
+TEST PARAMETER              RESULT    UNIT      REFERENCE RANGE    STATUS
+--------------------------------------------------------------------------------
+Glycated Hemoglobin (HbA1c) 8.4       %         4.0 - 5.6          HIGH [CRITICAL]
+Fasting Plasma Glucose      178       mg/dL     70 - 99            HIGH
+Total Cholesterol           248       mg/dL     125 - 200          HIGH
+Triglycerides               210       mg/dL     < 150              HIGH
+HDL Cholesterol             34        mg/dL     > 40               LOW
+LDL Cholesterol (Calculated)152       mg/dL     < 100              HIGH
+Serum Creatinine            1.48      mg/dL     0.74 - 1.35        HIGH
+eGFR (CKD-EPI 2021)         54        mL/min/1.73m2 > 60          LOW
+25-OH Vitamin D             14.2      ng/mL     30.0 - 100.0       LOW [DEFICIENT]
+High-Sensitivity CRP (hs-CRP)4.8      mg/L      < 1.0              HIGH
+================================================================================
+LABORATORY INTERPRETATION & PATHOLOGIST NOTES
+--------------------------------------------------------------------------------
+1. Glycemic Index: Elevated HbA1c (8.4%) and Fasting Glucose (178 mg/dL) indicate
+   uncontrolled Type 2 Diabetes Mellitus with significant glycemic stress.
+2. Lipid Profile: Mixed dyslipidemia noted with hypertriglyceridemia and sub-optimal HDL.
+3. Renal Function: Reduced eGFR (54 mL/min) and mild serum creatinine elevation 
+   suggest Stage 3a Chronic Kidney Disease secondary to metabolic stress.
+4. Inflammation & Micronutrient: Markedly elevated hs-CRP (4.8 mg/L) indicates 
+   systemic inflammation. Severe Vitamin D insufficiency noted.
+
+Verified By: Dr. Marcus Sterling, MD, FCAP (Chief Pathologist)
+Electronically Signed Date: 2026-06-12 11:45 EST
+================================================================================

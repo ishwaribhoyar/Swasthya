@@ -1,0 +1,59 @@
+====================================================================================================
+                        APEX SPECIALTY HEALTHCARE - EMERGENCY LABS
+                    Department of Pathology & Critical Care Diagnostics
+           880 Metro Parkway, Suite 100, Atlanta, GA 30308 | Tel: (404) 555-0192
+====================================================================================================
+
+PATIENT DEMOGRAPHICS & ACCESSION DETAILS
+----------------------------------------------------------------------------------------------------
+Patient Name    : Marcus Vance                       Barcode ID          : *HL-20260731-0099*
+Patient ID      : PAT-00099                          Report Number       : RPT-2026-88412
+Visit ID        : VST-99401 (Emergency Dept)         Sample Type         : Whole Blood / Serum
+Age / Gender    : 61 Yrs / Male                      Collection Time     : 2026-07-31 08:00 EST
+Height / Weight : 172 cm / 104.2 kg                  Received Time       : 2026-07-31 08:30 EST
+BMI             : 35.2 kg/m² (Obesity Class II)      Validation Status   : FINAL - CRITICAL ALERT
+Blood Group     : O-Negative                         Ordering Physician  : Dr. Sarah Jenkins, MD
+Ethnicity       : African American                   Analyzing Instrument: Roche Cobas 8000 c702
+Occupation      : Logistics Coordinator              Primary Technician  : R. Vance, MT (ASCP)
+Location        : Atlanta, GA, USA                   Attending Pathologist: Dr. Robert Lang, MD
+Lifestyle       : Active Smoker (20 pk-yrs) | Moderate Alcohol | Sedentary | High Sodium/Carb Diet
+----------------------------------------------------------------------------------------------------
+
+CRITICAL METABOLIC, RENAL & CARDIAC MARKER PANEL
+----------------------------------------------------------------------------------------------------
+TEST PARAMETER              RESULT     UNITS       REFERENCE RANGE    FLAG      METHODOLOGY
+----------------------------------------------------------------------------------------------------
+GLYCOSYLATED HEMOGLOBIN (HbA1c)
+  HbA1c                     11.4       %           4.0 - 5.6          CRITICAL  HPLC
+  Fasting Plasma Glucose     285        mg/dL       70 - 99            CRITICAL  Hexokinase
+
+RENAL & ELECTROLYTE PANEL
+  Serum Creatinine          3.85       mg/dL       0.74 - 1.35        CRITICAL  Jaffé Kinetic
+  Blood Urea Nitrogen (BUN) 68.2       mg/dL       7.0 - 20.0         CRITICAL  Urease-GLDH
+  eGFR (CKD-EPI 2021)       16         mL/min/1.73m² > 60             CRITICAL  Calculated
+  Serum Potassium           6.2        mmol/L      3.5 - 5.1          CRITICAL  ISE Indirect
+  Serum Sodium              129        mmol/L      136 - 145          LOW       ISE Indirect
+
+CARDIAC & INFLAMMATORY MARKERS
+  High-Sensitivity Troponin I 148.5    pg/mL       < 19.0             CRITICAL  ECLIA
+  hs-CRP                    18.4       mg/L        < 1.0              CRITICAL  Immunoturbidimetric
+----------------------------------------------------------------------------------------------------
+
+PATHOLOGIST NOTES & IMMEDIATE CLINICAL ALERTS
+----------------------------------------------------------------------------------------------------
+*** CRITICAL VALUE NOTIFICATION ***
+Physician Dr. Sarah Jenkins verbally notified at 09:15 EST by R. Vance, MT.
+
+1. ACUTE GLYCEMIC DECOMPENSATION: Extreme elevation of HbA1c (11.4%) and Fasting Glucose (285 mg/dL).
+2. RENAL CRISIS / AKI: eGFR reduced to 16 mL/min/1.73m² with severe elevation of Creatinine (3.85 mg/dL)
+   and BUN (68.2 mg/dL), indicating Acute Kidney Injury superimposed on Chronic Kidney Disease (Stage 4).
+3. ELECTROLYTE EMERGENCY: Severe Hyperkalemia (Potassium 6.2 mmol/L) present. High risk of cardiac arrhythmia.
+4. MYOCARDIAL INJURY: Elevated Troponin I (148.5 pg/mL) and hs-CRP (18.4 mg/L) suggest ongoing myocardial strain.
+
+RECOMENDATIONS: Immediate emergency clinical intervention required for potassium stabilization, insulin protocol,
+and urgent nephrology evaluation for dialysis consideration.
+----------------------------------------------------------------------------------------------------
+Report Electronically Authenticated By:
+Dr. Robert Lang, MD (Chief Pathologist, Lic #GA-882041)
+Date/Time: 2026-07-31 09:20 EST
+====================================================================================================

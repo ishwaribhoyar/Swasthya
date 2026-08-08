@@ -1,0 +1,166 @@
+/**
+ * ClinIQ Global Stylesheet
+ *
+ * - Defines CSS custom properties (design tokens) consumed by Tailwind
+ * - Provides base element resets and typography defaults
+ * - Implements custom scrollbar and focus ring styles
+ * - Light theme ONLY — no dark mode
+ *
+ * CSS variable values are in RGB channel format (R G B) so they work
+ * with Tailwind's opacity modifier: bg-primary/50 → rgba(29,111,164,0.5)
+ */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── Design Tokens ─────────────────────────────────────────────── */
+@layer base {
+  :root {
+    /* Brand */
+    --color-primary:            29 111 164;   /* #1D6FA4 Medical Blue */
+    --color-primary-foreground: 255 255 255;
+
+    --color-secondary:            46 155 107; /* #2E9B6B Healthcare Green */
+    --color-secondary-foreground: 255 255 255;
+
+    /* Surface */
+    --color-background:      248 250 252;     /* #F8FAFC very light gray */
+    --color-foreground:       15  23  42;     /* #0F172A slate-900 */
+
+    --color-card:            255 255 255;     /* white */
+    --color-card-foreground:  15  23  42;
+
+    --color-muted:           241 245 249;     /* slate-100 */
+    --color-muted-foreground: 100 116 139;    /* slate-500 */
+
+    --color-accent:          241 245 249;
+    --color-accent-foreground: 15 23 42;
+
+    /* Borders & Inputs */
+    --color-border: 226 232 240;             /* slate-200 */
+    --color-input:  226 232 240;
+    --color-ring:    29 111 164;             /* matches primary */
+
+    /* Border radius scale */
+    --radius: 0.75rem;
+  }
+}
+
+/* ─── Base Resets ───────────────────────────────────────────────── */
+@layer base {
+  *,
+  *::before,
+  *::after {
+    border-color: rgb(var(--color-border));
+  }
+
+  html {
+    font-size: 16px;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: rgb(var(--color-background));
+    color: rgb(var(--color-foreground));
+    font-family: 'Inter', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    line-height: 1.5;
+  }
+
+  /* Headings */
+  h1, h2, h3, h4, h5, h6 {
+    font-weight: 600;
+    line-height: 1.3;
+    color: rgb(var(--color-foreground));
+  }
+
+  /* Links */
+  a {
+    color: rgb(var(--color-primary));
+    text-decoration: none;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+
+  /* Remove default list styles on nav elements */
+  nav ul, nav ol {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* Images fill their container by default */
+  img, video {
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+/* ─── Custom Scrollbar ──────────────────────────────────────────── */
+@layer base {
+  ::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: rgb(203 213 225);   /* slate-300 */
+    border-radius: 99px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgb(148 163 184);   /* slate-400 */
+  }
+}
+
+/* ─── Focus Rings ───────────────────────────────────────────────── */
+@layer base {
+  *:focus-visible {
+    outline: none;
+    box-shadow:
+      0 0 0 2px rgb(var(--color-background)),
+      0 0 0 4px rgb(var(--color-ring));
+  }
+}
+
+/* ─── Utility Components ────────────────────────────────────────── */
+@layer components {
+  /* Card surface shorthand */
+  .card-surface {
+    background-color: rgb(var(--color-card));
+    border-radius: var(--radius);
+    border: 1px solid rgb(var(--color-border));
+    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.07), 0 1px 2px -1px rgb(0 0 0 / 0.07);
+  }
+
+  /* Badge base */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.125rem 0.625rem;
+    border-radius: 99px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    line-height: 1.5;
+  }
+
+  /* Clinical status badges */
+  .badge-critical { background: #FEE2E2; color: #DC2626; }
+  .badge-warning  { background: #FEF3C7; color: #D97706; }
+  .badge-normal   { background: #DCFCE7; color: #16A34A; }
+  .badge-info     { background: #DBEAFE; color: #2563EB; }
+  .badge-pending  { background: #F3E8FF; color: #9333EA; }
+
+  /* Page transition wrapper */
+  .page-enter {
+    animation: fadeIn 0.25s ease-out;
+  }
+}
