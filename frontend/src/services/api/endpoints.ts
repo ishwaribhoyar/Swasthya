@@ -17,6 +17,9 @@ export const API_ENDPOINTS = {
     DASHBOARD: '/analytics/dashboard',
   },
   ASSISTANT: {
-    CHAT: '/assistant/chat',
+    CHAT: '/ai-copilot/chat',
+  },
+  AI_COPILOT: {
+    CHAT: '/ai-copilot/chat',
   },
 } as const;

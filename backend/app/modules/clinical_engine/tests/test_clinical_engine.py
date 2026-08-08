@@ -92,8 +92,8 @@ async def test_clinical_engine_full_pipeline_api(async_client: AsyncClient) -> N
     patient_id = p_res.json()["data"]["id"]
 
     # 3. Ingest Lab Document
-    report_content = b"%PDF-1.4 %lab report Hemoglobin: 14.5 g/dL Serum Glucose: 140 mg/dL Serum Creatinine: 0.9 mg/dL SpO2: 97% BP: 120/80"
-    files = [("files", ("lab_panel.pdf", io.BytesIO(report_content), "application/pdf"))]
+    report_content = b"LABORATORY REPORT\nHemoglobin: 14.5 g/dL\nSerum Glucose: 140 mg/dL\nSerum Creatinine: 0.9 mg/dL\nSpO2: 97%\nBP: 120/80"
+    files = [("files", ("lab_panel.txt", io.BytesIO(report_content), "text/plain"))]
     await async_client.post(f"/api/v1/ingestion/patients/{patient_id}/upload", files=files, headers=headers)
 
     # 4. Trigger Analysis

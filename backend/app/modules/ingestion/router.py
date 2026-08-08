@@ -1,17 +1,20 @@
 """
-Ingestion API router.
+Secure document content streaming endpoint.
 
-Endpoints:
-  POST   /ingestion/patients/{patient_id}/upload — Multi-document upload (Up to 10 files)
-  GET    /ingestion/patients/{patient_id}/documents — List patient documents
-  GET    /ingestion/documents/{document_id} — Get document details & extracted text/HTML
-  GET    /ingestion/documents/{document_id}/timeline — Get step-by-step pipeline execution logs
-  DELETE /ingestion/documents/{document_id} — Delete document
+Added to the ingestion router:
+  GET /ingestion/documents/{document_id}/content   — stream original file bytes
+  GET /ingestion/documents/{document_id}/provenance — full evidence provenance metadata
 """
 from __future__ import annotations
 
+import mimetypes
+import os
+import re
+from pathlib import Path
 from typing import List, Optional
-from fastapi import APIRouter, Depends, File, Query, Request, UploadFile, status
+
+from fastapi import APIRouter, Depends, File, Query, Request, UploadFile, status, HTTPException
+from fastapi.responses import StreamingResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.dependencies import get_db, get_current_user
@@ -21,12 +24,15 @@ from app.modules.ingestion.schema import (
     DocumentRead,
     ProcessingLogRead,
     TextEntryRequest,
+    DocumentProvenanceRead,
 )
-
 from app.modules.ingestion.service import IngestionService
 from app.shared.schemas.common import APIResponse
 
 router = APIRouter(prefix="/ingestion", tags=["Ingestion & Document Intelligence"])
+
+# Canonical storage root — used for path traversal validation
+_STORAGE_ROOT = Path("storage/uploads").resolve()
 
 
 def _req_id(request: Request) -> str | None:
@@ -46,10 +52,7 @@ async def upload_documents(
     current_user: dict = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ) -> APIResponse[BatchUploadSummary]:
-    """
-    Ingest multiple medical documents into the asynchronous processing pipeline.
-    Renders real-time extraction results, SHA256 duplicate status, and batch summary metrics.
-    """
+    """Ingest multiple medical documents into the asynchronous processing pipeline."""
     service = IngestionService(db)
     clinician_id = str(current_user["sub"])
     summary = await service.process_batch_upload(patient_id, clinician_id, files)
@@ -84,7 +87,6 @@ async def create_text_entry(
         data=doc,
         request_id=_req_id(request),
     )
-
 
 
 @router.get(
@@ -136,6 +138,113 @@ async def get_document(
         message="Document details retrieved.",
         data=doc,
         request_id=_req_id(request),
+    )
+
+
+@router.get(
+    "/documents/{document_id}/provenance",
+    response_model=APIResponse[DocumentProvenanceRead],
+    summary="Get full evidence provenance metadata for a document",
+)
+async def get_document_provenance(
+    request: Request,
+    document_id: str,
+    current_user: dict = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+) -> APIResponse[DocumentProvenanceRead]:
+    """
+    Return full evidence provenance chain for a document:
+    - Original filename, MIME type, file size, SHA-256
+    - Extraction engine, confidence score, document category
+    - File availability status (available / missing)
+    - Uploaded at, clinical date
+    - Associated timeline events count
+    - Associated lab results count
+    """
+    service = IngestionService(db)
+    clinician_id = str(current_user["sub"])
+    provenance = await service.get_document_provenance(document_id, clinician_id)
+    return APIResponse(
+        success=True,
+        message="Document provenance retrieved.",
+        data=provenance,
+        request_id=_req_id(request),
+    )
+
+
+@router.get(
+    "/documents/{document_id}/content",
+    summary="Stream original uploaded artifact (PDF, image, or text)",
+)
+async def get_document_content(
+    document_id: str,
+    current_user: dict = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+) -> StreamingResponse:
+    """
+    Securely stream the original uploaded file artifact.
+
+    Security guarantees:
+    1. JWT authentication required.
+    2. Document ownership verified — clinician must own the document.
+    3. Patient ownership verified — document patient must match clinician.
+    4. Physical path validated to be inside storage/uploads/ root.
+    5. Path traversal attacks prevented.
+    6. File existence verified before streaming.
+    7. MIME type from trusted DB metadata (never from user input).
+    """
+    service = IngestionService(db)
+    clinician_id = str(current_user["sub"])
+
+    # Resolve document with ownership check
+    doc_orm = await service.get_document_orm(document_id, clinician_id)
+    if not doc_orm:
+        raise HTTPException(status_code=404, detail="Document not found or access denied.")
+
+    storage_path = doc_orm.storage_path
+    if not storage_path:
+        raise HTTPException(status_code=404, detail="Original file artifact not stored for this document.")
+
+    # Resolve and validate the absolute path
+    resolved = Path(storage_path).resolve()
+
+    # Path traversal guard — must be inside storage root
+    try:
+        resolved.relative_to(_STORAGE_ROOT)
+    except ValueError:
+        raise HTTPException(status_code=403, detail="Access denied — path outside storage boundary.")
+
+    if not resolved.exists() or not resolved.is_file():
+        raise HTTPException(
+            status_code=404,
+            detail="Original file artifact not found on disk. It may have been deleted.",
+        )
+
+    # Determine MIME type from trusted DB metadata
+    content_type = doc_orm.mime_type or "application/octet-stream"
+
+    # Safety: for text files, always serve as text/plain
+    if content_type in ("text/plain", "text/markdown") or storage_path.endswith((".txt", ".md")):
+        content_type = "text/plain; charset=utf-8"
+
+    # Sanitize filename for Content-Disposition header (strip path separators)
+    safe_filename = re.sub(r'[^\w\s\-_\.]', '_', doc_orm.original_filename or "document")[:200]
+
+    def _file_stream():
+        with open(resolved, "rb") as fh:
+            while chunk := fh.read(64 * 1024):  # 64 KB chunks
+                yield chunk
+
+    return StreamingResponse(
+        _file_stream(),
+        media_type=content_type,
+        headers={
+            "Content-Disposition": f'inline; filename="{safe_filename}"',
+            "Content-Length": str(resolved.stat().st_size),
+            "X-Document-Id": document_id,
+            "X-SHA256": doc_orm.sha256_hash or "",
+            "Cache-Control": "no-store",
+        },
     )
 
 

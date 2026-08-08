@@ -67,3 +67,37 @@ export interface IDocumentQueryParams {
   status?: string;
   sort_by?: string;
 }
+
+/** Evidence provenance chain for a single source document. */
+export interface IDocumentProvenance {
+  document_id: string;
+  patient_id: string;
+  clinician_id: string;
+
+  // File identity
+  original_filename: string;
+  mime_type: string;
+  file_type: string;            // pdf | image | txt
+  file_size_bytes: number;
+  sha256_hash: string;
+
+  // Clinical context
+  doc_category: DocumentCategory;
+  document_date?: string | null;
+  uploaded_at: string;
+
+  // Extraction provenance
+  parse_source?: string | null; // sarvam_parse | sarvam_vision | pymupdf_fallback | direct_text
+  confidence_score: number;
+  processing_status: DocumentStatus;
+  processing_time_ms: number;
+
+  // File availability
+  file_available: boolean;
+  file_unavailable_reason?: string | null;
+
+  // Evidence chain counts
+  timeline_event_count: number;
+  lab_result_count: number;
+  parameter_history_count: number;
+}

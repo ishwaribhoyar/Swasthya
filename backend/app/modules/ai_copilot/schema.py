@@ -1,41 +1,61 @@
 """
-Pydantic schemas for AI Copilot RAG queries and audit responses.
+Pydantic schemas for ClinIQ Phase 5 Grounded RAG & AI Copilot.
 """
 from __future__ import annotations
 
 from datetime import datetime
-from typing import List, Optional
+from typing import Any, Dict, List, Optional
 from pydantic import BaseModel, ConfigDict, Field
 
 
-class SourceCitationSchema(BaseModel):
-    """Source document citation schema."""
-
-    doc_id: str
-    filename: str
-    category: str
-    header: str
-    snippet: str
-    relevance_score: float
-
-
-class AIQueryRequest(BaseModel):
-    """Body for POST /ai-copilot/query — run RAG reasoning for a patient."""
-
-    patient_id: str = Field(..., description="UUID of target patient")
-    query: str = Field(..., min_length=2, max_length=2000, description="Clinician question")
-
-
-class AIQueryResponse(BaseModel):
-    """Response object containing clinical reasoning answer, citations, confidence, and audit hash."""
-
+class SourceAttribution(BaseModel):
+    """Clickable evidence source attribution metadata."""
     model_config = ConfigDict(from_attributes=True)
 
+    record_id: str
+    title: str
+    event_date: str
+    document_type: str
+
+
+class AmbiguousCandidate(BaseModel):
+    """Patient option returned when name lookup matches multiple patients."""
     id: str
-    patient_id: str
-    query: str
+    mrn: str
+    name: str
+    date_of_birth: str
+    gender: str
+
+
+class AICopilotChatRequest(BaseModel):
+    """Request payload for POST /api/v1/ai-copilot/chat."""
+    message: str = Field(..., min_length=2, max_length=2000, description="Clinician query message")
+    patient_id: Optional[str] = Field(None, description="Optional patient UUID when in patient-scoped mode")
+    conversation_id: Optional[str] = Field(None, description="Optional conversation context ID")
+
+
+class RAGAuditTrace(BaseModel):
+    """Stage-by-stage execution trace for auditability."""
+    intent: str
+    retrieval_pathway: str
+    sources_count: int
+    confidence: str
+    grounding_passed: bool
+    medical_safety_passed: bool
+
+
+class AICopilotChatResponse(BaseModel):
+    """Unified response container for ClinIQ AI Copilot."""
+    model_config = ConfigDict(from_attributes=True)
+
+    success: bool = True
     answer: str
-    confidence_score: float
-    sources: List[SourceCitationSchema]
-    audit_hash: str
-    created_at: datetime
+    patient_id: Optional[str] = None
+    patient_name: Optional[str] = None
+    confidence: str = "HIGH"  # HIGH, MEDIUM, LOW, INSUFFICIENT
+    intent: str = "PATIENT_SUMMARY"
+    sources: List[SourceAttribution] = []
+    is_general_info: bool = False
+    ambiguous_candidates: List[AmbiguousCandidate] = []
+    audit_trace: Optional[RAGAuditTrace] = None
+    disclaimer: str = "ClinIQ provides record-grounded clinical information and does not replace clinician judgment."

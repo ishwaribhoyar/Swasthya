@@ -20,6 +20,15 @@ export interface ICategoryPoint {
   color: string;
 }
 
+export interface ISystemStatus {
+  database_connected: boolean;
+  sqlite_fk_active: boolean;
+  openai_configured: boolean;
+  sarvam_configured: boolean;
+  queue_depth: number;
+  status: string;
+}
+
 export const dashboardApi = {
   getOverview: async (): Promise<ApiResponse<IDashboardOverview>> =>
     client.get('/dashboard/overview'),
@@ -29,4 +38,8 @@ export const dashboardApi = {
 
   getDocumentCategories: async (): Promise<ApiResponse<ICategoryPoint[]>> =>
     client.get('/dashboard/document-categories'),
+
+  getSystemStatus: async (): Promise<ApiResponse<ISystemStatus>> =>
+    client.get('/dashboard/system-status'),
 };
+

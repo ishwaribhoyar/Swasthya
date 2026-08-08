@@ -65,4 +65,22 @@ async def test_timeline_api_and_visit_grouping(async_client: AsyncClient) -> Non
     groups = t_res.json()["data"]
     assert len(groups) >= 1
     assert groups[0]["visit_date"] == "2026-08-02"
-    assert len(groups[0]["events"]) >= 1
+
+    # New schema uses 'encounters' (renamed from 'events' for semantic clarity)
+    assert "encounters" in groups[0], (
+        f"Expected 'encounters' key in visit group, got keys: {list(groups[0].keys())}"
+    )
+    assert len(groups[0]["encounters"]) >= 1
+
+    # Verify new provenance fields are present
+    first_enc = groups[0]["encounters"][0]
+    assert "event_type" in first_enc
+    assert "date_priority_source" in first_enc
+    assert "confidence" in first_enc
+    assert "observations" in first_enc
+
+    # Verify stats endpoint
+    s_res = await async_client.get(f"/api/v1/timeline/patients/{patient_id}/stats", headers=headers)
+    assert s_res.status_code == 200
+    stats = s_res.json()["data"]
+    assert stats["total_events"] >= 1

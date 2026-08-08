@@ -26,6 +26,7 @@ from app.modules.ingestion.repository import IngestionRepository
 from app.modules.ingestion.schema import (
     BatchUploadSummary,
     DocumentListItem,
+    DocumentProvenanceRead,
     DocumentRead,
     ProcessingLogRead,
     UploadJobRead,
@@ -318,6 +319,43 @@ class IngestionService:
                         )
                         self._session.add(p_rec)
 
+                    # Extract & Persist Prescription + PrescriptionMedicines if category == prescription
+                    if result.doc_category in ("prescription", "medication", "notes") or "rx" in filename.lower() or "prescription" in filename.lower():
+                        try:
+                            from app.modules.clinical_engine.medical_parser import MedicalParser
+                            from app.modules.medicine_engine.prescription_model import Prescription, PrescriptionMedicine
+
+                            parsed_meds = MedicalParser.parse_prescriptions(result.extracted_text or "")
+                            if parsed_meds:
+                                prescription = Prescription(
+                                    patient_id=patient_id,
+                                    clinician_id=clinician_id,
+                                    document_id=doc.id,
+                                    prescribed_by=None,
+                                    prescription_date=ev_data.event_date,
+                                    notes=f"Extracted from {filename}",
+                                )
+                                self._session.add(prescription)
+                                await self._session.flush()
+
+                                for pm in parsed_meds:
+                                    med_obj = PrescriptionMedicine(
+                                        prescription_id=prescription.id,
+                                        patient_id=patient_id,
+                                        clinician_id=clinician_id,
+                                        medicine_name=pm["medicine_name"],
+                                        strength=pm.get("strength"),
+                                        dose=pm.get("dose"),
+                                        frequency=pm.get("frequency"),
+                                        route=pm.get("route"),
+                                        duration_days=pm.get("duration_days"),
+                                        instructions=pm.get("instructions"),
+                                    )
+                                    self._session.add(med_obj)
+                                await self._add_step_log(doc.id, "medicine_extraction", "completed", f"Extracted {len(parsed_meds)} prescribed medicines to database")
+                        except Exception as ex_m:
+                            _log.warning("MEDICINE_PERSIST.FAIL", error=str(ex_m))
+
                     await self._session.commit()
                 except Exception as ex_t:
                     _log.warning("TIMELINE_EVENT.PERSIST_FAIL", error=str(ex_t))
@@ -568,5 +606,89 @@ class IngestionService:
         _log.info("TEXT_ENTRY.COMPLETED", document_id=saved_doc.id, patient_id=patient_id)
         return self._to_read(saved_doc)
 
+    async def get_document_orm(self, document_id: str, clinician_id: str):
+        """
+        Fetch the raw Document ORM object — used by the content streaming endpoint
+        so it can read storage_path, mime_type, and sha256_hash directly.
+        Returns None if the document does not exist or does not belong to this clinician.
+        """
+        return await self._repo.get_document_by_id(document_id, clinician_id)
 
+    async def get_document_provenance(
+        self, document_id: str, clinician_id: str
+    ) -> DocumentProvenanceRead:
+        """
+        Build the full evidence provenance chain for a document:
+        - File identity (name, MIME, SHA-256, size)
+        - Extraction engine and confidence
+        - File availability (is the physical artifact still on disk?)
+        - Evidence chain counts (timeline events, lab results, parameter history)
+        """
+        from sqlalchemy import select, func, text as sa_text
+        from app.modules.timeline.model import TimelineEvent
 
+        doc = await self._repo.get_document_by_id(document_id, clinician_id)
+        if not doc:
+            raise NotFoundError(f"Document '{document_id}' not found or access denied.")
+
+        # Check physical file availability
+        file_available = False
+        file_unavailable_reason: Optional[str] = None
+        if doc.storage_path:
+            p = Path(doc.storage_path)
+            if p.exists() and p.is_file():
+                file_available = True
+            else:
+                file_unavailable_reason = "Physical file not found on disk."
+        else:
+            file_unavailable_reason = "No storage path recorded for this document."
+
+        # Count associated timeline events
+        te_count_res = await self._session.execute(
+            select(func.count()).where(
+                TimelineEvent.record_id == document_id,
+                TimelineEvent.clinician_id == clinician_id,
+            )
+        )
+        timeline_event_count = te_count_res.scalar() or 0
+
+        # Count associated lab results
+        lr_count_res = await self._session.execute(
+            sa_text(
+                "SELECT COUNT(*) FROM lab_results WHERE document_id = :did AND clinician_id = :cid"
+            ),
+            {"did": document_id, "cid": clinician_id},
+        )
+        lab_result_count = lr_count_res.scalar() or 0
+
+        # Count associated parameter history
+        ph_count_res = await self._session.execute(
+            sa_text(
+                "SELECT COUNT(*) FROM parameter_history WHERE record_id = :rid AND clinician_id = :cid"
+            ),
+            {"rid": document_id, "cid": clinician_id},
+        )
+        parameter_history_count = ph_count_res.scalar() or 0
+
+        return DocumentProvenanceRead(
+            document_id=doc.id,
+            patient_id=doc.patient_id,
+            clinician_id=doc.clinician_id,
+            original_filename=doc.original_filename,
+            mime_type=doc.mime_type,
+            file_type=doc.file_type,
+            file_size_bytes=doc.file_size_bytes,
+            sha256_hash=doc.sha256_hash,
+            doc_category=doc.doc_category,
+            document_date=doc.document_date,
+            uploaded_at=doc.created_at,
+            parse_source=doc.parse_source,
+            confidence_score=doc.confidence_score,
+            processing_status=doc.status,
+            processing_time_ms=doc.processing_time_ms,
+            file_available=file_available,
+            file_unavailable_reason=file_unavailable_reason,
+            timeline_event_count=timeline_event_count,
+            lab_result_count=lab_result_count,
+            parameter_history_count=parameter_history_count,
+        )

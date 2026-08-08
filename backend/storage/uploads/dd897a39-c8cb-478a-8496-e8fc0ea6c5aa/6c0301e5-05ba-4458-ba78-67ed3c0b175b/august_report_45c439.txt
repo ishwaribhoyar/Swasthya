@@ -1,0 +1,11 @@
+
+CITY GENERAL HOSPITAL - EMERGENCY & ICU DEPT
+PATIENT: John Doe | AGE: 45 | GENDER: Male
+SAMPLE COLLECTION DATE: 01 August 2026
+
+LABORATORY INVESTIGATIONS:
+Serum Potassium: 6.5 mEq/L (Reference: 3.5 - 5.0 mEq/L) [CRITICAL_HIGH]
+Serum Creatinine: 2.4 mg/dL (Reference: 0.6 - 1.2 mg/dL) [CRITICAL_HIGH]
+
+MEDICATIONS PRESCRIBED:
+1. Metformin 500mg - 1 tablet BD (Twice daily)

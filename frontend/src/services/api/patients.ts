@@ -37,4 +37,9 @@ export const patientsApi = {
   getStatistics: async (): Promise<ApiResponse<IPatientStatistics>> => {
     return client.get('/patients/statistics');
   },
+
+  search: async (q: string): Promise<ApiResponse<IPatientListItem[]>> => {
+    return client.get('/patients/search/global', { params: { q } });
+  },
 };
+

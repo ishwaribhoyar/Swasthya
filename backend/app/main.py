@@ -45,7 +45,7 @@ def create_app() -> FastAPI:
     # Register custom HTTP middlewares FIRST
     app.middleware("http")(request_id_middleware)
 
-    # Register CORS middleware LAST so it wraps as the outermost layer
+    # Register CORS middleware LAST so it becomes the outermost layer of ASGI application
     configure_cors(app)
 
     # Register custom exception handlers with guaranteed CORS headers

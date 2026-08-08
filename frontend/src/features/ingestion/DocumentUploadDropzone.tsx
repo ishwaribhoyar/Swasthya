@@ -25,8 +25,10 @@ export default function DocumentUploadDropzone({ onUpload, loading }: DocumentUp
     const validFiles = newFiles.filter((file) => {
       const isPdf = file.type === 'application/pdf' || file.name.endsWith('.pdf');
       const isImage = file.type.startsWith('image/');
-      return isPdf || isImage;
+      const isText = file.type.startsWith('text/') || file.name.endsWith('.txt');
+      return isPdf || isImage || isText;
     });
+
 
     if (validFiles.length < newFiles.length) {
       setError('Some files were skipped. Only PDF documents and Medical Images (PNG, JPG, WEBP) are supported.');
@@ -106,10 +108,11 @@ export default function DocumentUploadDropzone({ onUpload, loading }: DocumentUp
           ref={fileInputRef}
           type="file"
           multiple
-          accept=".pdf,image/*"
+          accept=".pdf,.txt,image/*"
           onChange={(e) => e.target.files && handleFiles(e.target.files)}
           className="hidden"
         />
+
         <div className="flex flex-col items-center gap-2">
           <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 text-primary">
             <UploadCloud className="h-6 w-6" />

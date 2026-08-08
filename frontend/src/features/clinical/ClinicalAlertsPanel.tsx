@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { ShieldAlert, Check } from 'lucide-react';
+import { ShieldAlert, Check, ExternalLink } from 'lucide-react';
 import { IClinicalAlert, AlertSeverity } from '@/types/clinical';
+import SourceEvidenceDrawer from '@/features/ingestion/SourceEvidenceDrawer';
 
 interface ClinicalAlertsPanelProps {
   alerts: IClinicalAlert[];
@@ -16,6 +17,7 @@ const SEVERITY_BADGES: Record<AlertSeverity, { bg: string; color: string; border
 
 export default function ClinicalAlertsPanel({ alerts, onAcknowledge }: ClinicalAlertsPanelProps) {
   const [ackingId, setAckingId] = useState<string | null>(null);
+  const [sourceDocId, setSourceDocId] = useState<string | null>(null);
 
   if (alerts.length === 0) return null;
 
@@ -84,10 +86,27 @@ export default function ClinicalAlertsPanel({ alerts, onAcknowledge }: ClinicalA
                   <p className="text-slate-600 text-[11px] leading-relaxed">{alert.action_recommendation}</p>
                 </div>
               )}
+
+              {/* View Evidence — only shown when source document is traced */}
+              {alert.document_id && (
+                <button
+                  onClick={() => setSourceDocId(alert.document_id!)}
+                  className="mt-2 flex items-center gap-1.5 text-[11px] font-semibold text-primary hover:text-primary/80 transition-colors"
+                >
+                  <ExternalLink className="h-3 w-3" />
+                  View Source Evidence
+                </button>
+              )}
             </div>
           );
         })}
       </div>
+
+      <SourceEvidenceDrawer
+        documentId={sourceDocId}
+        isOpen={!!sourceDocId}
+        onClose={() => setSourceDocId(null)}
+      />
     </div>
   );
 }

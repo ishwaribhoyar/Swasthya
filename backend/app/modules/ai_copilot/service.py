@@ -1,148 +1,298 @@
 """
-AI Copilot Service Engine.
+AI Copilot Service Engine — Orchestrates the complete 12-Stage Grounded RAG Pipeline.
 
-Orchestrates the 12-Stage Production Clinical RAG Pipeline:
-  Stage 1: Patient & Clinician Multi-tenant Query Entry
-  Stage 4: Patient Context Builder (Demographics, Alerts, Timeline)
-  Stage 5: Hierarchical Semantic Chunker
-  Stage 6: Dense Vector Embeddings (384d)
-  Stage 7: Sparse Okapi BM25 Keyword Search
-  Stage 8: Hybrid Retrieval & Reciprocal Rank Fusion (RRF)
-  Stage 9: Cross-Encoder Re-ranking
-  Stage 10: MMR Diversification across Clinical Domains
-  Stage 11: Safety, PHI Scrubbing & Groundness Verification
-  Stage 12: GPT-5 Nano Reasoning, Source Citations & Audit Hash Logging
+Stages:
+  1. Input Normalization & Input Guard
+  2. Patient Resolution & Authorization Scope
+  3. Query Intent Classification
+  4. Query Decomposition
+  5. Retrieval Strategy Selection
+  6. Structured / Hybrid Retrieval
+  7. Reciprocal Rank Fusion (RRF)
+  8. Reranking & Relevance Filtering
+  9. Context Grounding & Privacy Isolation
+  10. Token-Budgeted Context Construction
+  11. GPT-5 Nano Response Generation
+  12. Evidence Validation, Safety Firewall & Source Attribution
 """
 from __future__ import annotations
 
-import json
-import uuid
-from typing import List, Sequence
+from typing import Any, Dict, List, Optional
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.ai.chunking.hierarchical_chunker import HierarchicalChunker, ClinicalChunk
-from app.ai.context_builder.patient_context import PatientContextBuilder
-from app.ai.llm.gpt_nano import GPTNanoReasoningEngine, GPTNanoResponse
-from app.ai.retrievers.hybrid_retriever import HybridRetriever
-from app.modules.ai_copilot.model import AIChatLog
-from app.modules.ai_copilot.repository import AICopilotRepository
-from app.modules.ai_copilot.schema import AIQueryRequest, AIQueryResponse, SourceCitationSchema
+from app.ai.llm.openai_client import GPT5NanoClient
+from app.ai.retrievers.structured_retriever import StructuredRetriever, StructuredEvidence
+from app.ai.retrievers.hybrid_retriever import UnstructuredHybridRetriever
+from app.ai.guardrails.safety_firewall import SafetyFirewall
+from app.ai.copilot.patient_resolver import PatientResolver
+from app.ai.copilot.query_router import QueryRouter
+from app.ai.copilot.context_builder import ContextBuilder
+
+from app.modules.ai_copilot.schema import (
+    AICopilotChatRequest,
+    AICopilotChatResponse,
+    AmbiguousCandidate,
+    RAGAuditTrace,
+    SourceAttribution,
+)
 from app.observability.logger import get_logger
 
 _log = get_logger(__name__)
 
 
 class AICopilotService:
-    """Service orchestrating the 12-Stage Production Clinical RAG Pipeline."""
+    """Service orchestrating the 12-stage Grounded RAG pipeline for ClinIQ Copilot."""
 
     def __init__(self, session: AsyncSession) -> None:
         self._session = session
-        self._repo = AICopilotRepository(session)
-        self._ctx_builder = PatientContextBuilder(session)
-        self._retriever = HybridRetriever()
+        self._gpt_client = GPT5NanoClient()
+        self._patient_resolver = PatientResolver(session)
+        self._structured_retriever = StructuredRetriever(session)
+        self._unstructured_retriever = UnstructuredHybridRetriever(session)
 
-    async def query_patient(
-        self, patient_id: str, clinician_id: str, query: str
-    ) -> AIQueryResponse:
-        """
-        Execute full 12-Stage Production Clinical RAG Pipeline for a patient.
-        """
-        # 1. Build Patient Context Snapshot (Demographics, Alerts, Document Timeline)
-        snapshot = await self._ctx_builder.build_snapshot(patient_id, clinician_id)
-
-        # 2. Hierarchical Semantic Chunking across all patient documents
-        all_chunks: List[ClinicalChunk] = []
-
-        # Create a synthetic context chunk for patient summary snapshot
-        if snapshot.patient_summary_text:
-            all_chunks.extend(
-                HierarchicalChunker.chunk_document(
-                    patient_id=patient_id,
-                    doc_id="patient-profile",
-                    filename="Patient Profile & Medical History",
-                    category="summary",
-                    text=snapshot.patient_summary_text,
-                )
+    async def process_chat_message(
+        self, req: AICopilotChatRequest, clinician_id: str
+    ) -> AICopilotChatResponse:
+        """Execute full 12-stage RAG pipeline and return grounded response."""
+        
+        # STAGE 1: Input Normalization & Input Guard
+        clean_message = req.message.strip()
+        input_guard_res = SafetyFirewall.validate_input(clean_message)
+        if not input_guard_res.passed:
+            return AICopilotChatResponse(
+                success=False,
+                answer=input_guard_res.reason or "Invalid query pattern detected.",
+                confidence="INSUFFICIENT",
             )
 
-        for doc_item in snapshot.documents_summary:
-            doc_chunks = HierarchicalChunker.chunk_document(
-                patient_id=patient_id,
-                doc_id=doc_item["doc_id"],
-                filename=doc_item["filename"],
-                category=doc_item["category"],
-                text=doc_item["full_text"],
-            )
-            all_chunks.extend(doc_chunks)
-
-        # 3. Hybrid Retrieval (Dense Vector + Sparse BM25 + RRF + Re-ranking + MMR)
-        retrieved_scored_chunks = self._retriever.retrieve(query, all_chunks, top_k=5)
-
-        # 4. GPT-5 Nano Reasoning Engine (Synthesizes answer, source citations, & audit hash)
-        gpt_res: GPTNanoResponse = await GPTNanoReasoningEngine.generate_response_async(
-            query=query,
-            patient_snapshot=snapshot,
-            retrieved_chunks=retrieved_scored_chunks,
-        )
-
-
-        # 5. Persist Audit Log into SQLite
-        log_id = f"log-{uuid.uuid4().hex[:12]}"
-        sources_data = [s.to_dict() for s in gpt_res.sources]
-
-        chat_log = AIChatLog(
-            id=log_id,
+        # STAGE 2: Patient Resolution & Ownership Check
+        resolution = await self._patient_resolver.resolve_patient(
+            query_text=clean_message,
             clinician_id=clinician_id,
-            patient_id=patient_id,
-            query=query,
-            answer=gpt_res.answer,
-            confidence_score=gpt_res.confidence_score,
-            sources_json=json.dumps(sources_data),
-            audit_hash=gpt_res.audit_hash,
+            explicit_patient_id=req.patient_id,
         )
-        saved_log = await self._repo.log_query(chat_log)
+
+        if resolution.status == "AMBIGUOUS":
+            cands = [
+                AmbiguousCandidate(
+                    id=c.id,
+                    mrn=c.mrn,
+                    name=f"{c.first_name} {c.last_name}",
+                    date_of_birth=c.date_of_birth.strftime("%Y-%m-%d"),
+                    gender=c.gender,
+                )
+                for c in resolution.candidates
+            ]
+            return AICopilotChatResponse(
+                success=True,
+                answer=resolution.message or "Multiple patients matched your query. Please select the correct patient.",
+                confidence="INSUFFICIENT",
+                intent="AMBIGUOUS_PATIENT",
+                ambiguous_candidates=cands,
+            )
+
+        # Handle General Medical Knowledge query without patient context
+        intent = QueryRouter.classify_query(clean_message)
+        if intent.is_general_info:
+            return await self._handle_general_medical_info(clean_message, intent.target_medicine)
+
+        # If query requires patient context but patient was not found
+        if resolution.status != "RESOLVED" or not resolution.patient:
+            return AICopilotChatResponse(
+                success=True,
+                answer=resolution.message or "I couldn't find a matching patient record. Please specify a patient name or MRN.",
+                confidence="INSUFFICIENT",
+                intent=intent.intent_type,
+            )
+
+        patient = resolution.patient
+
+        # STAGE 3 & 4: Intent Classification & Query Decomposition
+        _log.info("RAG.PIPELINE.INTENT", intent=intent.intent_type, pathway=intent.retrieval_pathway, patient_id=patient.id)
+
+        # STAGE 5 & 6: Retrieval Execution (STRUCTURED vs UNSTRUCTURED)
+        evidence_text = ""
+        sources: List[SourceAttribution] = []
+        confidence_level = "HIGH"
+
+        if intent.retrieval_pathway == "STRUCTURED":
+            evidence_obj = await self._execute_structured_retrieval(patient.id, clinician_id, intent)
+            evidence_text = evidence_obj.evidence_summary
+            confidence_level = evidence_obj.confidence_level
+            sources = [SourceAttribution(**s) for s in evidence_obj.source_records]
+
+        elif intent.retrieval_pathway == "UNSTRUCTURED":
+            # STAGE 7 & 8: BM25 + Vector Search + Reciprocal Rank Fusion (RRF) & Reranking
+            unstructured_chunks = await self._unstructured_retriever.retrieve_unstructured_chunks(
+                query=clean_message, patient_id=patient.id, clinician_id=clinician_id, top_k=4
+            )
+            
+            if not unstructured_chunks:
+                evidence_text = "No relevant clinical notes or document sections found for this patient."
+                confidence_level = "INSUFFICIENT"
+            else:
+                chunk_lines = []
+                for chunk, rrf_score in unstructured_chunks:
+                    chunk_lines.append(f"Document: {chunk.document_title} ({chunk.event_date})\nContent: {chunk.text_content}")
+                    sources.append(
+                        SourceAttribution(
+                            record_id=chunk.document_id,
+                            title=chunk.document_title,
+                            event_date=chunk.event_date,
+                            document_type=chunk.document_type.upper(),
+                        )
+                    )
+                evidence_text = "\n\n".join(chunk_lines)
+                confidence_level = "HIGH" if len(unstructured_chunks) >= 2 else "MEDIUM"
+
+        else:
+            # HYBRID PATHWAY
+            st_obj = await self._structured_retriever.retrieve_patient_summary(patient.id, clinician_id)
+            sources = [SourceAttribution(**s) for s in st_obj.source_records]
+
+            # For short name queries (patient lookups), use only compact structured evidence.
+            # Appending raw OCR chunks bloats the prompt and exhausts GPT-5 Nano reasoning budget.
+            is_short_query = len(clean_message.strip().split()) <= 3
+            if is_short_query:
+                evidence_text = st_obj.evidence_summary
+            else:
+                un_chunks = await self._unstructured_retriever.retrieve_unstructured_chunks(
+                    query=clean_message, patient_id=patient.id, clinician_id=clinician_id, top_k=2
+                )
+                doc_ctx = "\n".join([c[0].text_content for c in un_chunks])
+                evidence_text = f"STRUCTURED SUMMARY:\n{st_obj.evidence_summary}\n\nDOCUMENT CONTEXT:\n{doc_ctx}"
+                for c, _ in un_chunks:
+                    sources.append(SourceAttribution(
+                        record_id=c.document_id,
+                        title=c.document_title,
+                        event_date=c.event_date,
+                        document_type=c.document_type.upper()
+                    ))
+
+
+        # STAGE 9 & 10: Context Grounding, Privacy Sanitization & Token-Budgeted Context Construction
+        grounding_check = SafetyFirewall.validate_context_grounding(patient.id, [s.model_dump() for s in sources])
+        if not grounding_check.passed:
+            return AICopilotChatResponse(
+                success=False,
+                answer="Cross-patient evidence verification failed.",
+                confidence="INSUFFICIENT",
+            )
+
+        sanitized_evidence = SafetyFirewall.sanitize_context_privacy(evidence_text)
+        context_package = ContextBuilder.build_patient_grounded_context(
+            patient=patient,
+            query_text=clean_message,
+            intent_type=intent.intent_type,
+            evidence_text=sanitized_evidence,
+            sources=[s.model_dump() for s in sources],
+            confidence_level=confidence_level,
+        )
+
+        # STAGE 11: GPT-5 Nano Generation (or graceful API unavailable response if unconfigured)
+        try:
+            raw_answer = await self._gpt_client.generate_grounded_response(
+                system_prompt=context_package.system_prompt,
+                user_context_prompt=context_package.user_prompt,
+                max_tokens=8000,
+            )
+        except Exception as exc:
+            _log.error("RAG.PIPELINE.GENERATION_ERROR", error=str(exc))
+            return AICopilotChatResponse(
+                success=False,
+                answer=f"AI Copilot is unavailable because the OpenAI API is not configured or reachable. ({str(exc)})",
+                confidence="INSUFFICIENT",
+            )
+
+        # STAGE 12: Evidence Validation, Safety Firewall & Source Attribution
+        output_check = SafetyFirewall.validate_output_claims(
+            generated_text=raw_answer,
+            retrieved_evidence_summary=sanitized_evidence,
+            sources_count=len(sources),
+        )
+
+        final_answer = output_check.sanitized_content or raw_answer
+        if not final_answer.strip():
+            final_answer = "I couldn't find documentation regarding this topic in the available patient records."
+
+        # Deduplicate sources
+        unique_sources: Dict[str, SourceAttribution] = {}
+        for s in sources:
+            unique_sources[s.record_id] = s
+
+        audit_trace = RAGAuditTrace(
+            intent=intent.intent_type,
+            retrieval_pathway=intent.retrieval_pathway,
+            sources_count=len(unique_sources),
+            confidence=confidence_level,
+            grounding_passed=True,
+            medical_safety_passed=output_check.passed,
+        )
 
         _log.info(
-            "RAG_PIPELINE.COMPLETED",
-            patient_id=patient_id,
-            log_id=log_id,
-            confidence=gpt_res.confidence_score,
-            audit_hash=gpt_res.audit_hash[:16],
+            "RAG.PIPELINE.COMPLETED",
+            patient_id=patient.id,
+            intent=intent.intent_type,
+            sources_count=len(unique_sources),
+            confidence=confidence_level,
         )
 
-        return AIQueryResponse(
-            id=saved_log.id,
-            patient_id=patient_id,
-            query=query,
-            answer=gpt_res.answer,
-            confidence_score=gpt_res.confidence_score,
-            sources=[SourceCitationSchema(**s) for s in sources_data],
-            audit_hash=gpt_res.audit_hash,
-            created_at=saved_log.created_at,
+        return AICopilotChatResponse(
+            success=True,
+            answer=final_answer,
+            patient_id=patient.id,
+            patient_name=f"{patient.first_name} {patient.last_name}",
+            confidence=confidence_level if len(unique_sources) > 0 else "INSUFFICIENT",
+            intent=intent.intent_type,
+            sources=list(unique_sources.values()),
+            audit_trace=audit_trace,
         )
 
-    async def get_patient_chat_history(
-        self, patient_id: str, clinician_id: str
-    ) -> List[AIQueryResponse]:
-        """Fetch audit log history for patient."""
-        logs = await self._repo.list_chat_history(patient_id, clinician_id)
-        result = []
-        for l in logs:
-            try:
-                sources_data = json.loads(l.sources_json)
-            except Exception:
-                sources_data = []
-
-            result.append(
-                AIQueryResponse(
-                    id=l.id,
-                    patient_id=l.patient_id,
-                    query=l.query,
-                    answer=l.answer,
-                    confidence_score=l.confidence_score,
-                    sources=[SourceCitationSchema(**s) for s in sources_data],
-                    audit_hash=l.audit_hash,
-                    created_at=l.created_at,
-                )
+    async def _execute_structured_retrieval(
+        self, patient_id: str, clinician_id: str, intent: QueryRouter.QueryIntent
+    ) -> StructuredEvidence:
+        """Route to appropriate structured SQLite retrieval method based on query intent."""
+        if intent.intent_type == "MEDICINE_FREQUENCY_QUERY" or intent.intent_type == "MEDICINE_QUERY":
+            return await self._structured_retriever.retrieve_medicine_history(
+                patient_id=patient_id, clinician_id=clinician_id, drug_name=intent.target_medicine
             )
-        return result
+        elif intent.intent_type == "TREND_QUERY":
+            return await self._structured_retriever.retrieve_parameter_trend(
+                patient_id=patient_id, clinician_id=clinician_id, parameter_name=intent.target_parameter
+            )
+        elif intent.intent_type == "VITAL_QUERY":
+            return await self._structured_retriever.retrieve_vitals_history(
+                patient_id=patient_id, clinician_id=clinician_id
+            )
+        elif intent.intent_type in ["TIMELINE_QUERY", "VISIT_QUERY"]:
+            return await self._structured_retriever.retrieve_timeline_events(
+                patient_id=patient_id, clinician_id=clinician_id
+            )
+        else:
+            return await self._structured_retriever.retrieve_patient_summary(
+                patient_id=patient_id, clinician_id=clinician_id
+            )
+
+    async def _handle_general_medical_info(
+        self, query_text: str, target_medicine: Optional[str]
+    ) -> AICopilotChatResponse:
+        """Handle general medical knowledge query clearly separated from patient records."""
+        context_pkg = ContextBuilder.build_general_info_context(query_text, target_medicine)
+        
+        try:
+            answer = await self._gpt_client.generate_grounded_response(
+                system_prompt=context_pkg.system_prompt,
+                user_context_prompt=context_pkg.user_prompt,
+            )
+            formatted_answer = f"**General Medical Information** (Not specific to any patient's record):\n\n{answer}"
+        except Exception as exc:
+            formatted_answer = f"**General Medical Information**:\n\n{query_text}\n\n*Note: OpenAI API is currently unconfigured or unreachable.*"
+
+        return AICopilotChatResponse(
+            success=True,
+            answer=formatted_answer,
+            confidence="HIGH",
+            intent="GENERAL_MEDICAL_INFORMATION",
+            is_general_info=True,
+            sources=[],
+        )

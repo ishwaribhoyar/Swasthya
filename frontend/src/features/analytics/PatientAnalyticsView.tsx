@@ -8,11 +8,15 @@ import {
   Droplets,
   CheckCircle2,
   HelpCircle,
+  RotateCcw,
 } from 'lucide-react';
 import Loader from '@/components/common/Loader';
 import EmptyState from '@/components/common/EmptyState';
 import { LineTrendChart } from '@/components/charts';
 import { analyticsApi, IAnalyticsOverview } from '@/services/api/analytics';
+import { clinicalApi } from '@/services/api/clinical';
+import SourceEvidenceDrawer from '@/features/ingestion/SourceEvidenceDrawer';
+import { ExternalLink } from 'lucide-react';
 
 interface PatientAnalyticsViewProps {
   patientId: string;
@@ -21,7 +25,9 @@ interface PatientAnalyticsViewProps {
 export default function PatientAnalyticsView({ patientId }: PatientAnalyticsViewProps) {
   const [analytics, setAnalytics] = useState<IAnalyticsOverview | null>(null);
   const [loading, setLoading] = useState(true);
+  const [reanalyzing, setReanalyzing] = useState(false);
   const [selectedParameter, setSelectedParameter] = useState<string | null>(null);
+  const [sourceDocId, setSourceDocId] = useState<string | null>(null);
 
   const fetchAnalytics = useCallback(async () => {
     try {
@@ -41,6 +47,19 @@ export default function PatientAnalyticsView({ patientId }: PatientAnalyticsView
       setLoading(false);
     }
   }, [patientId, selectedParameter]);
+
+  const handleReanalyze = async () => {
+    try {
+      setReanalyzing(true);
+      await clinicalApi.analyze(patientId);
+      await fetchAnalytics();
+    } catch (err) {
+      console.error('Re-analysis failed:', err);
+    } finally {
+      setReanalyzing(false);
+    }
+  };
+
 
   useEffect(() => {
     fetchAnalytics();
@@ -133,9 +152,20 @@ export default function PatientAnalyticsView({ patientId }: PatientAnalyticsView
 
       {/* Parameter Selector Bar */}
       <div className="bg-white rounded-xl border border-slate-200 p-4 shadow-sm space-y-2">
-        <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider block">
-          Tracked Longitudinal Parameters ({trends.length}):
-        </span>
+        <div className="flex items-center justify-between">
+          <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider block">
+            Tracked Longitudinal Parameters ({trends.length}):
+          </span>
+          <button
+            onClick={handleReanalyze}
+            disabled={reanalyzing}
+            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-blue-700 bg-blue-50 border border-blue-200 hover:bg-blue-100 rounded-lg transition-colors shadow-2xs disabled:opacity-50"
+          >
+            <RotateCcw className={`h-3.5 w-3.5 ${reanalyzing ? 'animate-spin' : ''}`} />
+            <span>{reanalyzing ? 'Re-analyzing...' : 'Re-analyze Patient Intelligence'}</span>
+          </button>
+        </div>
+
         <div className="flex flex-wrap gap-2">
           {trends.map((t) => (
             <button
@@ -243,6 +273,7 @@ export default function PatientAnalyticsView({ patientId }: PatientAnalyticsView
                     <th className="py-3 px-4">Event Date</th>
                     <th className="py-3 px-4">Observed Value</th>
                     <th className="py-3 px-4">Status</th>
+                    <th className="py-3 px-4">Source</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100">
@@ -265,6 +296,20 @@ export default function PatientAnalyticsView({ patientId }: PatientAnalyticsView
                           {pt.status}
                         </span>
                       </td>
+                      <td className="py-3.5 px-4">
+                        {pt.source_record_id ? (
+                          <button
+                            onClick={() => setSourceDocId(pt.source_record_id)}
+                            className="flex items-center gap-1 text-[11px] font-semibold text-primary hover:text-primary/70 transition-colors"
+                            title="View original source document for this measurement"
+                          >
+                            <ExternalLink className="h-3 w-3" />
+                            View Source
+                          </button>
+                        ) : (
+                          <span className="text-[11px] text-slate-400 italic">—</span>
+                        )}
+                      </td>
                     </tr>
                   ))}
                 </tbody>
@@ -273,6 +318,12 @@ export default function PatientAnalyticsView({ patientId }: PatientAnalyticsView
           </div>
         </div>
       )}
+
+      <SourceEvidenceDrawer
+        documentId={sourceDocId}
+        isOpen={!!sourceDocId}
+        onClose={() => setSourceDocId(null)}
+      />
     </div>
   );
 }

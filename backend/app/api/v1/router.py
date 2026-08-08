@@ -1,8 +1,18 @@
 """
-Main API router aggregating all module routers.
+Main API router aggregating all module routers and registering domain models.
 """
 from __future__ import annotations
 from fastapi import APIRouter
+
+# Explicitly import all SQLAlchemy ORM models so Base.metadata is fully populated
+from app.modules.auth.model import User  # noqa: F401
+from app.modules.patients.model import Patient  # noqa: F401
+from app.modules.ingestion.model import Document, UploadJob, ProcessingLog  # noqa: F401
+from app.modules.clinical_engine.model import LabResult, VitalSign, OrganScore, ClinicalAlert  # noqa: F401
+from app.modules.ai_copilot.model import AIChatLog  # noqa: F401
+from app.modules.timeline.model import TimelineEvent  # noqa: F401
+from app.modules.analytics.model import ParameterHistory  # noqa: F401
+from app.modules.medicine_engine.prescription_model import Prescription, PrescriptionMedicine  # noqa: F401
 
 # Import all module routers
 from app.modules.auth.router import router as auth_router

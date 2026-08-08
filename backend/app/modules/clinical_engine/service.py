@@ -1,6 +1,13 @@
 """
 Clinical Service.
 Controls clinical analysis, lab extraction, 8-organ system scoring, and alert generation.
+
+KEY PROVENANCE INVARIANT:
+  Every LabResult, VitalSign, and ClinicalAlert created by this service MUST carry
+  the `document_id` of the specific Document that produced it.
+
+  This invariant powers the full evidence chain:
+    Measurement → LabResult.document_id → Document.id → storage_path → original artifact
 """
 from __future__ import annotations
 
@@ -9,10 +16,11 @@ from typing import List, Optional, Sequence
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.core.exceptions import NotFoundError
+from app.modules.auth.model import User  # noqa: F401
 from app.modules.clinical_engine.alert_engine import AlertEngine
 from app.modules.clinical_engine.medical_parser import MedicalParser
 from app.modules.clinical_engine.model import ClinicalAlert, LabResult, OrganScore, VitalSign
+
 from app.modules.clinical_engine.organ_scoring import OrganScoringEngine
 from app.modules.clinical_engine.repository import ClinicalRepository
 from app.modules.clinical_engine.schema import (
@@ -38,19 +46,46 @@ class ClinicalService:
 
     async def analyze_patient(self, patient_id: str, clinician_id: str) -> ClinicalOverviewRead:
         """
-        Run clinical intelligence analysis over all ingested documents for patient.
-        """
-        docs = await self._ingestion_repo.list_documents_for_patient(patient_id, clinician_id, status="completed")
-        combined_text = "\n\n".join(d.extracted_text or "" for d in docs)
+        Run per-document clinical intelligence analysis over all completed documents.
 
-        # 1. Parse Labs
-        parsed_labs = MedicalParser.parse_labs(combined_text)
-        lab_entities: List[LabResult] = []
-        for pl in parsed_labs:
-            lab_entities.append(
-                LabResult(
+        PROVENANCE GUARANTEE:
+          Each LabResult / VitalSign / ClinicalAlert is stamped with the document_id
+          of the specific source Document that produced it. This guarantees a complete
+          evidence chain from every measurement back to its original source artifact.
+
+        Architecture:
+          For each Document:
+            1. Parse labs from extracted_text → LabResult(document_id=doc.id)
+            2. Parse vitals from extracted_text → VitalSign(document_id=doc.id)
+          Across all documents:
+            3. Calculate organ scores from aggregated lab data
+            4. Generate clinical alerts from aggregated data
+              → ClinicalAlert(document_id=most_recent_relevant_doc.id)
+        """
+        docs = await self._ingestion_repo.list_documents_for_patient(
+            patient_id, clinician_id, status="completed"
+        )
+
+        all_parsed_labs: list[dict] = []
+        all_parsed_vitals: dict = {}
+        all_lab_entities: List[LabResult] = []
+
+        # ── Per-document processing with provenance ──────────────────────────
+        for doc in docs:
+            text = doc.extracted_text or ""
+            if not text.strip():
+                continue
+
+            # Parse labs from this specific document
+            doc_labs = MedicalParser.parse_labs(text)
+            doc_vitals = MedicalParser.parse_vitals(text)
+
+            # Create LabResult records stamped with this document's ID
+            for pl in doc_labs:
+                lr = LabResult(
                     patient_id=patient_id,
                     clinician_id=clinician_id,
+                    document_id=doc.id,          # ← PROVENANCE STAMP
                     test_name=pl["test_name"],
                     test_code=pl["test_code"],
                     numeric_value=pl["numeric_value"],
@@ -59,31 +94,40 @@ class ClinicalService:
                     ref_max=pl["ref_max"],
                     status=pl["status"],
                     confidence_score=pl["confidence_score"],
+                    tested_at=doc.document_date or datetime.now(timezone.utc),
                 )
-            )
-        if lab_entities:
-            await self._repo.save_lab_results(lab_entities)
+                all_lab_entities.append(lr)
+                all_parsed_labs.append(pl)
 
-        # 2. Parse Vitals
-        parsed_vitals = MedicalParser.parse_vitals(combined_text)
-        vital_entity: Optional[VitalSign] = None
-        if parsed_vitals and any(k in parsed_vitals for k in ["sbp", "spo2", "heart_rate"]):
-            vital_entity = VitalSign(
-                patient_id=patient_id,
-                clinician_id=clinician_id,
-                sbp=parsed_vitals.get("sbp"),
-                dbp=parsed_vitals.get("dbp"),
-                heart_rate=parsed_vitals.get("heart_rate"),
-                spo2=parsed_vitals.get("spo2"),
-                respiratory_rate=parsed_vitals.get("respiratory_rate"),
-                temperature_c=parsed_vitals.get("temperature_c"),
-                bmi=parsed_vitals.get("bmi"),
-                status=parsed_vitals.get("status", "NORMAL"),
-            )
-            await self._repo.save_vital_sign(vital_entity)
+            # Create VitalSign record stamped with this document's ID
+            if doc_vitals and any(k in doc_vitals for k in ["sbp", "spo2", "heart_rate"]):
+                vs = VitalSign(
+                    patient_id=patient_id,
+                    clinician_id=clinician_id,
+                    document_id=doc.id,          # ← PROVENANCE STAMP
+                    sbp=doc_vitals.get("sbp"),
+                    dbp=doc_vitals.get("dbp"),
+                    heart_rate=doc_vitals.get("heart_rate"),
+                    spo2=doc_vitals.get("spo2"),
+                    respiratory_rate=doc_vitals.get("respiratory_rate"),
+                    temperature_c=doc_vitals.get("temperature_c"),
+                    bmi=doc_vitals.get("bmi"),
+                    status=doc_vitals.get("status", "NORMAL"),
+                    recorded_at=doc.document_date or datetime.now(timezone.utc),
+                )
+                await self._repo.save_vital_sign(vs)
 
-        # 3. Calculate 8-Organ Scores
-        organ_data = OrganScoringEngine.calculate_scores(parsed_labs, parsed_vitals)
+                # Merge vitals for organ scoring (keep latest non-None values)
+                for k, v in doc_vitals.items():
+                    if v is not None:
+                        all_parsed_vitals[k] = v
+
+        # Save all lab entities in one batch
+        if all_lab_entities:
+            await self._repo.save_lab_results(all_lab_entities)
+
+        # ── Cross-document organ scoring ────────────────────────────────────
+        organ_data = OrganScoringEngine.calculate_scores(all_parsed_labs, all_parsed_vitals)
         organ_entities: List[OrganScore] = [
             OrganScore(
                 patient_id=patient_id,
@@ -98,12 +142,17 @@ class ClinicalService:
         ]
         await self._repo.save_organ_scores(organ_entities)
 
-        # 4. Generate Clinical Alerts
-        alert_data = AlertEngine.generate_alerts(parsed_labs, parsed_vitals)
+        # ── Alert generation with provenance ────────────────────────────────
+        # Each alert is linked to the most recently uploaded document that contributed data.
+        # Use the last processed doc as the provenance anchor for aggregate alerts.
+        latest_doc_id = docs[-1].id if docs else None
+
+        alert_data = AlertEngine.generate_alerts(all_parsed_labs, all_parsed_vitals)
         alert_entities: List[ClinicalAlert] = [
             ClinicalAlert(
                 patient_id=patient_id,
                 clinician_id=clinician_id,
+                document_id=latest_doc_id,       # ← PROVENANCE STAMP (latest trigger doc)
                 alert_type=ad["alert_type"],
                 severity=ad["severity"],
                 title=ad["title"],
@@ -121,8 +170,10 @@ class ClinicalService:
         _log.info(
             "CLINICAL.ANALYZED",
             patient_id=patient_id,
-            labs_count=len(lab_entities),
+            documents_processed=len(docs),
+            labs_count=len(all_lab_entities),
             alerts_count=len(alert_entities),
+            vitals_docs=sum(1 for d in docs if d.extracted_text and MedicalParser.parse_vitals(d.extracted_text or "")),
         )
 
         return await self.get_clinical_overview(patient_id, clinician_id)

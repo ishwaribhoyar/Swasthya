@@ -10,14 +10,14 @@ from app.database.session import engine
 from app.database.base import Base
 
 # Import all SQLAlchemy models to register them with Base.metadata
-import app.modules.auth.model  # noqa: F401
-import app.modules.patients.model  # noqa: F401
-import app.modules.ingestion.model  # noqa: F401
-import app.modules.clinical_engine.model  # noqa: F401
-import app.modules.ai_copilot.model  # noqa: F401
-import app.modules.timeline.model  # noqa: F401
-import app.modules.analytics.model  # noqa: F401
-
+from app.modules.auth.model import User  # noqa: F401
+from app.modules.patients.model import Patient  # noqa: F401
+from app.modules.ingestion.model import Document, UploadJob, ProcessingLog  # noqa: F401
+from app.modules.clinical_engine.model import LabResult, VitalSign, OrganScore, ClinicalAlert  # noqa: F401
+from app.modules.ai_copilot.model import AIChatLog  # noqa: F401
+from app.modules.timeline.model import TimelineEvent  # noqa: F401
+from app.modules.analytics.model import ParameterHistory  # noqa: F401
+from app.modules.medicine_engine.prescription_model import Prescription, PrescriptionMedicine  # noqa: F401
 
 
 
@@ -39,7 +39,6 @@ async def init_db() -> None:
             "ALTER TABLE documents ADD COLUMN document_date DATETIME",
             "ALTER TABLE documents ADD COLUMN extracted_markdown TEXT",
         ]
-
 
         for m in migrations:
             try:

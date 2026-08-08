@@ -1,75 +1,39 @@
 """
-AI Copilot API Router.
+FastAPI router for ClinIQ Phase 5 Grounded AI Copilot.
 
 Endpoints:
-  POST /ai-copilot/query — Run 12-Stage Production Clinical RAG Pipeline for a patient
-  GET  /ai-copilot/patients/{patient_id}/history — Fetch patient AI chat audit history
+  POST /api/v1/ai-copilot/chat — Global & Patient-scoped AI Copilot query endpoint.
 """
 from __future__ import annotations
 
-from typing import List
-from fastapi import APIRouter, Depends, Request, status
+from typing import Dict, Any
+from fastapi import APIRouter, Depends, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.core.dependencies import get_db, get_current_user
-from app.modules.ai_copilot.schema import AIQueryRequest, AIQueryResponse
+from app.core.dependencies import get_current_user, get_db
+from app.modules.ai_copilot.schema import AICopilotChatRequest, AICopilotChatResponse
 from app.modules.ai_copilot.service import AICopilotService
 from app.shared.schemas.common import APIResponse
 
-router = APIRouter(prefix="/ai-copilot", tags=["AI Copilot & Clinical RAG"])
-
-
-def _req_id(request: Request) -> str | None:
-    return request.headers.get("X-Request-ID")
+router = APIRouter(prefix="/ai-copilot", tags=["AI Copilot"])
 
 
 @router.post(
-    "/query",
-    response_model=APIResponse[AIQueryResponse],
+    "/chat",
+    response_model=APIResponse[AICopilotChatResponse],
     status_code=status.HTTP_200_OK,
-    summary="Run 12-Stage Production Clinical RAG Pipeline for a patient",
+    summary="Ask ClinIQ AI Copilot a grounded clinical question",
 )
-async def query_patient_rag(
-    request: Request,
-    body: AIQueryRequest,
-    current_user: dict = Depends(get_current_user),
+async def chat_with_copilot(
+    req: AICopilotChatRequest,
+    current_user: Dict[str, Any] = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
-) -> APIResponse[AIQueryResponse]:
+) -> APIResponse[AICopilotChatResponse]:
     """
-    Execute full Production Clinical RAG Pipeline:
-    Patient Context Snapshot -> Semantic Chunking -> Dense (384d) + Sparse BM25 Search
-    -> Reciprocal Rank Fusion (RRF) -> Cross-Encoder Reranking -> MMR Diversification
-    -> Grounded GPT-5 Nano Reasoning -> Source Citations & SHA256 Audit Hash.
+    Execute 12-stage Grounded RAG pipeline for a clinician query.
+    Enforces JWT.sub clinician isolation and patient ownership.
     """
+    clinician_id = str(current_user.get("sub") or current_user.get("id"))
     service = AICopilotService(db)
-    clinician_id = str(current_user["sub"])
-    res = await service.query_patient(body.patient_id, clinician_id, body.query)
-    return APIResponse(
-        success=True,
-        message="Clinical reasoning completed successfully.",
-        data=res,
-        request_id=_req_id(request),
-    )
-
-
-@router.get(
-    "/patients/{patient_id}/history",
-    response_model=APIResponse[List[AIQueryResponse]],
-    summary="Fetch AI Copilot query history & audit logs for a patient",
-)
-async def get_patient_chat_history(
-    request: Request,
-    patient_id: str,
-    current_user: dict = Depends(get_current_user),
-    db: AsyncSession = Depends(get_db),
-) -> APIResponse[List[AIQueryResponse]]:
-    """Fetch past clinical AI reasoning logs and source citations for patient."""
-    service = AICopilotService(db)
-    clinician_id = str(current_user["sub"])
-    history = await service.get_patient_chat_history(patient_id, clinician_id)
-    return APIResponse(
-        success=True,
-        message="Patient AI chat history retrieved.",
-        data=history,
-        request_id=_req_id(request),
-    )
+    res = await service.process_chat_message(req=req, clinician_id=clinician_id)
+    return APIResponse(data=res)

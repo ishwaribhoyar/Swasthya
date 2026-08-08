@@ -17,6 +17,7 @@ import {
   IDashboardOverview,
   ITrendPoint,
   ICategoryPoint,
+  ISystemStatus,
 } from '@/services/api/dashboard';
 
 export default function DashboardPage() {
@@ -25,6 +26,7 @@ export default function DashboardPage() {
   const [overview, setOverview] = useState<IDashboardOverview | null>(null);
   const [trend, setTrend] = useState<ITrendPoint[]>([]);
   const [categories, setCategories] = useState<ICategoryPoint[]>([]);
+  const [sysStatus, setSysStatus] = useState<ISystemStatus | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -33,14 +35,16 @@ export default function DashboardPage() {
       try {
         setLoading(true);
         setError(null);
-        const [overviewRes, trendRes, catRes] = await Promise.all([
+        const [overviewRes, trendRes, catRes, statusRes] = await Promise.all([
           dashboardApi.getOverview(),
           dashboardApi.getAdmissionsTrend(30),
           dashboardApi.getDocumentCategories(),
+          dashboardApi.getSystemStatus(),
         ]);
         if (overviewRes.data) setOverview(overviewRes.data);
         if (trendRes.data) setTrend(trendRes.data);
         if (catRes.data) setCategories(catRes.data);
+        if (statusRes.data) setSysStatus(statusRes.data);
       } catch (err: any) {
         setError(err?.message || 'Failed to load dashboard data.');
       } finally {
@@ -49,6 +53,7 @@ export default function DashboardPage() {
     };
     fetchAll();
   }, []);
+
 
   const statCards = [
     {
@@ -175,16 +180,29 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      {/* ── Recent Activity ─────────────────────────────────────────── */}
+      {/* ── System Status ─────────────────────────────────────────── */}
       <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-6">
-        <h3 className="text-lg font-semibold text-slate-900 mb-2">System Status</h3>
-        <div className="flex items-center gap-3 text-sm text-slate-600">
-          <span className="flex items-center gap-1.5">
+        <h3 className="text-lg font-semibold text-slate-900 mb-3">System & Pipeline Readiness</h3>
+        <div className="flex flex-wrap items-center gap-6 text-xs text-slate-600">
+          <span className="flex items-center gap-1.5 font-medium">
             <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-            Backend connected · SQLite FK enforcement active
+            SQLite Database: Connected
+          </span>
+          <span className="flex items-center gap-1.5 font-medium">
+            <span className={`h-2 w-2 rounded-full ${sysStatus?.openai_configured ? 'bg-emerald-500' : 'bg-amber-500'}`} />
+            OpenAI GPT-5 Nano: {sysStatus?.openai_configured ? 'Configured & Active' : 'Key Unset'}
+          </span>
+          <span className="flex items-center gap-1.5 font-medium">
+            <span className={`h-2 w-2 rounded-full ${sysStatus?.sarvam_configured ? 'bg-emerald-500' : 'bg-amber-500'}`} />
+            Sarvam Doc AI: {sysStatus?.sarvam_configured ? 'Active' : 'Fallback Mode'}
+          </span>
+          <span className="flex items-center gap-1.5 font-medium">
+            <span className="h-2 w-2 rounded-full bg-blue-500" />
+            Processing Queue Depth: {sysStatus?.queue_depth ?? 0}
           </span>
         </div>
       </div>
     </PageLayout>
   );
 }
+

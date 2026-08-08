@@ -14,7 +14,8 @@ All routes wrap data in standard APIResponse envelope and isolate data by JWT cl
 """
 from __future__ import annotations
 
-from typing import Optional
+from typing import Optional, List
+
 from fastapi import APIRouter, Depends, Query, Request, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -220,3 +221,29 @@ async def restore_patient(
         data=restored,
         request_id=_req_id(request),
     )
+
+
+@router.get(
+    "/search/global",
+    response_model=APIResponse[List[PatientListItem]],
+    summary="Global patient search by name or MRN",
+)
+async def search_patients(
+    request: Request,
+    q: str = Query(..., min_length=1, description="Search query string"),
+    current_user: dict = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+) -> APIResponse[List[PatientListItem]]:
+    """Instant search for patients by name or MRN."""
+    service = PatientService(db)
+    clinician_id = str(current_user["sub"])
+    results, _ = await service.list_patients(
+        clinician_id=clinician_id, search=q, page=1, page_size=10
+    )
+    return APIResponse(
+        success=True,
+        message="Search results retrieved.",
+        data=results,
+        request_id=_req_id(request),
+    )
+

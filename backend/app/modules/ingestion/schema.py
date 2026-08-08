@@ -104,3 +104,37 @@ class BatchUploadSummary(BaseModel):
     total_processing_time_ms: int
     documents: List[DocumentRead]
 
+
+class DocumentProvenanceRead(BaseModel):
+    """Full evidence provenance chain for a clinical source document."""
+
+    document_id: str
+    patient_id: str
+    clinician_id: str
+
+    # File identity
+    original_filename: str
+    mime_type: str
+    file_type: str
+    file_size_bytes: int
+    sha256_hash: str
+
+    # Clinical context
+    doc_category: str
+    document_date: Optional[datetime] = None
+    uploaded_at: datetime
+
+    # Extraction provenance
+    parse_source: Optional[str] = None         # sarvam_parse / sarvam_vision / pymupdf_fallback
+    confidence_score: float
+    processing_status: str                      # completed / failed / duplicate
+    processing_time_ms: int
+
+    # File availability
+    file_available: bool
+    file_unavailable_reason: Optional[str] = None
+
+    # Evidence chain counts
+    timeline_event_count: int = 0
+    lab_result_count: int = 0
+    parameter_history_count: int = 0

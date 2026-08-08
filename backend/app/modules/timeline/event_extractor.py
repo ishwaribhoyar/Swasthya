@@ -308,13 +308,34 @@ class PriorityEventExtractor:
     def _synthesize_summary(
         cls, title: str, category: str, text: str, parameters: List[Dict], entities: Dict
     ) -> str:
-        lines = [f"{title}"]
+        # 1. Clean binary garbage & control characters from text
+        clean_text = ""
+        if text:
+            # Filter non-printable control chars (except newline/space)
+            clean_text = "".join(ch for ch in text if ord(ch) >= 32 or ch in "\n\t")
+            # Remove ZIP/PK headers if any
+            clean_text = re.sub(r"PK\x03\x04[^\n]*", "", clean_text)
+            # Remove Markdown table boilerplate lines (| --- | --- |)
+            clean_text = re.sub(r"\|\s*---[^\n]*", "", clean_text)
+            # Remove repeated pipes
+            clean_text = re.sub(r"\|{2,}", "|", clean_text).strip()
+
+        parts = []
         if parameters:
-            p_summary = ", ".join([f"{p['parameter_name']}: {p['value_str']} ({p['status']})" for p in parameters[:3]])
-            lines.append(f"Key Measurements: {p_summary}")
+            p_summary = ", ".join([f"{p['parameter_name']}: {p['value_str']} [{p['status']}]" for p in parameters[:4]])
+            parts.append(f"Recorded measurements: {p_summary}")
+        
         if entities.get("medicines"):
             m_summary = ", ".join([m["name"] for m in entities["medicines"]])
-            lines.append(f"Prescribed Medications: {m_summary}")
-        if not parameters and not entities.get("medicines"):
-            lines.append((text or "Clinical event record ingested.")[:150])
-        return " | ".join(lines)
+            parts.append(f"Prescribed: {m_summary}")
+
+        if not parts:
+            if clean_text and not clean_text.startswith("PK"):
+                # Take first 150 clean characters
+                first_line = clean_text.split("\n")[0][:150].strip()
+                parts.append(first_line or "Clinical document record ingested.")
+            else:
+                parts.append("Clinical assessment record successfully processed.")
+
+        return ". ".join(parts)
+

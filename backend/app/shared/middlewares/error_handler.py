@@ -28,6 +28,8 @@ def _add_cors_headers(request: Request, response: JSONResponse) -> JSONResponse:
         response.headers["Access-Control-Allow-Headers"] = "*"
     else:
         response.headers["Access-Control-Allow-Origin"] = "*"
+        response.headers["Access-Control-Allow-Methods"] = "*"
+        response.headers["Access-Control-Allow-Headers"] = "*"
     return response
 
 

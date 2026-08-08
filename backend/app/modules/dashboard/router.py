@@ -55,3 +55,16 @@ async def get_document_categories(
     svc = DashboardService(db)
     cats = await svc.get_document_category_distribution(str(current_user["sub"]))
     return APIResponse(success=True, message="Document categories retrieved.", data=cats)
+
+
+@router.get("/system-status", response_model=APIResponse[Dict])
+async def get_system_status(
+    request: Request,
+    current_user: dict = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+) -> APIResponse[Dict]:
+    """Return real-time system status and module readiness."""
+    svc = DashboardService(db)
+    status_data = await svc.get_system_status()
+    return APIResponse(success=True, message="System status retrieved.", data=status_data)
+

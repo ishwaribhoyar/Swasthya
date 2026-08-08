@@ -3,6 +3,7 @@ import { ApiError } from '@/types/api';
 
 const client = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000/api/v1',
+  timeout: 60000, // 60 second timeout to accommodate 12-stage RAG pipeline and GPT-5 Nano generation
   headers: {
     'Content-Type': 'application/json',
   },

@@ -46,6 +46,9 @@ import PatientTimelineView from '@/features/timeline/PatientTimelineView';
 import PatientAnalyticsView from '@/features/analytics/PatientAnalyticsView';
 
 
+import PatientMedicinesView from '@/features/patients/PatientMedicinesView';
+
+
 export default function PatientDetailPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
@@ -54,7 +57,8 @@ export default function PatientDetailPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const [activeTab, setActiveTab] = useState<'overview' | 'records' | 'timeline' | 'analytics' | 'copilot' | 'settings'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'records' | 'timeline' | 'analytics' | 'medicines' | 'copilot' | 'settings'>('overview');
+
 
   // Documents State
   const [documents, setDocuments] = useState<IDocumentListItem[]>([]);
@@ -288,7 +292,7 @@ export default function PatientDetailPage() {
               </div>
 
               <p className="text-sm font-medium text-slate-600 mt-1 capitalize">
-                {patient.age} Years • {patient.gender}
+                {patient.age && patient.age > 0 ? `${patient.age} Years` : 'Age unavailable'} • {patient.gender}
                 {patient.blood_group ? ` • Blood Group ${patient.blood_group}` : ''}
                 {` • Registered ${registeredMonth}`}
               </p>
@@ -337,10 +341,7 @@ export default function PatientDetailPage() {
                   : 'border-transparent text-slate-500 hover:text-slate-700'
               }`}
             >
-              <span>Medical Records</span>
-              <span className="px-2 py-0.5 text-[10px] font-semibold bg-emerald-100 text-emerald-800 rounded-full border border-emerald-300">
-                Active Phase 3
-              </span>
+              Medical Records
             </button>
 
             <button
@@ -351,10 +352,7 @@ export default function PatientDetailPage() {
                   : 'border-transparent text-slate-500 hover:text-slate-700'
               }`}
             >
-              <span>Clinical Analytics</span>
-              <span className="px-2 py-0.5 text-[10px] font-semibold bg-emerald-100 text-emerald-800 rounded-full border border-emerald-300">
-                Active Phase 4
-              </span>
+              Clinical Analytics
             </button>
 
             <button
@@ -365,10 +363,18 @@ export default function PatientDetailPage() {
                   : 'border-transparent text-slate-500 hover:text-slate-700'
               }`}
             >
-              <span>Clinical Timeline</span>
-              <span className="px-2 py-0.5 text-[10px] font-semibold bg-slate-100 text-slate-500 rounded-full border border-slate-200">
-                Available Phase 6
-              </span>
+              Clinical Timeline
+            </button>
+
+            <button
+              onClick={() => setActiveTab('medicines')}
+              className={`py-3 px-1 border-b-2 font-medium text-sm transition-colors whitespace-nowrap flex items-center gap-2 ${
+                activeTab === 'medicines'
+                  ? 'border-primary text-primary font-semibold'
+                  : 'border-transparent text-slate-500 hover:text-slate-700'
+              }`}
+            >
+              Medicines & Rx
             </button>
 
             <button
@@ -379,10 +385,7 @@ export default function PatientDetailPage() {
                   : 'border-transparent text-slate-500 hover:text-slate-700'
               }`}
             >
-              <span>AI Copilot</span>
-              <span className="px-2 py-0.5 text-[10px] font-semibold bg-slate-100 text-slate-500 rounded-full border border-slate-200">
-                Available Phase 7
-              </span>
+              AI Copilot
             </button>
 
             <button
@@ -396,6 +399,7 @@ export default function PatientDetailPage() {
               Record Settings
             </button>
           </nav>
+
         </div>
 
         {/* Tab Content Areas */}
@@ -689,21 +693,34 @@ export default function PatientDetailPage() {
 
 
 
-        {/* Phase 4 Active Workspace: Clinical Event Timeline */}
         {activeTab === 'timeline' && (
           <PatientTimelineView patientId={patient.id} />
         )}
 
+        {activeTab === 'medicines' && (
+          <PatientMedicinesView patientId={patient.id} />
+        )}
 
         {activeTab === 'copilot' && (
-          <div className="bg-white rounded-xl border border-slate-200 p-8 text-center">
-            <EmptyState
-              icon={Bot}
-              title="AI Clinical Copilot Initializing"
-              description="AI-driven diagnostic assistance and record synthesis will be active for this patient in Phase 7."
-            />
+          <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
+            <div className="flex items-center gap-2 mb-4 pb-3 border-b">
+              <Bot className="h-5 w-5 text-blue-600" />
+              <h3 className="font-bold text-slate-900">ClinIQ AI Copilot — Patient Context: {patient.first_name} {patient.last_name} ({patient.mrn})</h3>
+            </div>
+            <p className="text-xs text-slate-500 mb-4">Ask grounded clinical questions or request patient summaries. OpenAI GPT-5 Nano with 12-stage RAG pipeline active.</p>
+            <button
+              onClick={() => {
+                const btn = document.querySelector('button:has(svg.lucide-bot)') as HTMLButtonElement;
+                if (btn) btn.click();
+              }}
+              className="px-4 py-2 bg-blue-600 text-white font-medium text-sm rounded-lg hover:bg-blue-700 transition-colors shadow-sm flex items-center gap-2"
+            >
+              <Bot className="h-4 w-4" />
+              Open Interactive Copilot Drawer for {patient.first_name}
+            </button>
           </div>
         )}
+
 
         {activeTab === 'settings' && (
           <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm max-w-xl space-y-4">

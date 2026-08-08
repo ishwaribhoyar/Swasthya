@@ -104,5 +104,7 @@ htmlcov/
 # ──────────────── MISC ────────────────
 .temp/
 tmp/
+scratch/
+backend/scratch/*.txt
 *.bak
 *.tmp

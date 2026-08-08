@@ -1,5 +1,6 @@
-import { Activity, Heart, ShieldAlert, Zap, Thermometer, Droplets, Stethoscope, Wind, HelpCircle } from 'lucide-react';
-import { IOrganScore, OrganStatus } from '@/types/clinical';
+import { Activity, Heart, ShieldAlert, Zap, Thermometer, Droplets, Stethoscope, Wind } from 'lucide-react';
+import { IOrganScore } from '@/types/clinical';
+
 
 interface OrganScoreCardProps {
   score: IOrganScore;

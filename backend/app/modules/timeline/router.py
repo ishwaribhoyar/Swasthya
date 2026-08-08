@@ -2,7 +2,8 @@
 Timeline API Router.
 
 Endpoints:
-  GET /timeline/patients/{patient_id} — Fetch canonical longitudinal patient timeline grouped by visit date
+  GET /timeline/patients/{patient_id}       — Rich longitudinal clinical encounters
+  GET /timeline/patients/{patient_id}/stats — Timeline statistics header
 """
 from __future__ import annotations
 
@@ -11,7 +12,7 @@ from fastapi import APIRouter, Depends, Query, Request
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.dependencies import get_db, get_current_user
-from app.modules.timeline.schema import VisitGroupRead
+from app.modules.timeline.schema import VisitGroupRead, TimelineStatsRead
 from app.modules.timeline.service import TimelineService
 from app.shared.schemas.common import APIResponse
 
@@ -25,23 +26,53 @@ def _req_id(request: Request) -> str | None:
 @router.get(
     "/patients/{patient_id}",
     response_model=APIResponse[List[VisitGroupRead]],
-    summary="Fetch canonical patient timeline grouped by visit date",
+    summary="Fetch rich longitudinal clinical encounters grouped by visit date",
 )
 async def get_patient_timeline(
     request: Request,
     patient_id: str,
-    category: Optional[str] = Query(None, description="Filter by event category: visit, lab_report, prescription, vitals, note"),
-    search: Optional[str] = Query(None, description="Search term for medicines, labs, symptoms"),
+    category: Optional[str] = Query(
+        None,
+        alias="doc_type",
+        description="Filter by category: lab, prescription, vitals, note",
+    ),
+    search: Optional[str] = Query(
+        None,
+        description="Search clinical observations, medicines, or symptoms",
+    ),
     current_user: dict = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ) -> APIResponse[List[VisitGroupRead]]:
-    """Fetch longitudinal timeline events for a patient ordered by event_date."""
+    """Fetch rich structured longitudinal timeline for a patient."""
     service = TimelineService(db)
     clinician_id = str(current_user["sub"])
     groups = await service.get_patient_timeline(patient_id, clinician_id, category, search)
     return APIResponse(
         success=True,
-        message="Patient timeline events retrieved.",
+        message="Patient clinical timeline retrieved.",
         data=groups,
+        request_id=_req_id(request),
+    )
+
+
+@router.get(
+    "/patients/{patient_id}/stats",
+    response_model=APIResponse[TimelineStatsRead],
+    summary="Fetch longitudinal timeline statistics for the patient header",
+)
+async def get_patient_timeline_stats(
+    request: Request,
+    patient_id: str,
+    current_user: dict = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+) -> APIResponse[TimelineStatsRead]:
+    """Fetch timeline statistics (total events, date range, category counts)."""
+    service = TimelineService(db)
+    clinician_id = str(current_user["sub"])
+    stats = await service.get_timeline_stats(patient_id, clinician_id)
+    return APIResponse(
+        success=True,
+        message="Timeline statistics retrieved.",
+        data=stats,
         request_id=_req_id(request),
     )
