@@ -2,7 +2,7 @@ import os
 import textwrap
 from pathlib import Path
 
-base_dir = Path(r'c:\Users\datta.000\Desktop\hackathon\backend')
+base_dir = Path(__file__).resolve().parent / 'backend'
 
 def w(path_str, content):
     p = base_dir / path_str
